@@ -1,0 +1,131 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--oly-sage), var(--oly-forest-muted));
+}
+
+.name {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--oly-charcoal);
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--oly-stone-dark);
+  margin-top: 2px;
+}
+
+.section {
+  margin-bottom: 22px;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--oly-stone-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-size: 11px;
+  color: var(--oly-stone-dark);
+  margin-bottom: 2px;
+}
+
+.infoValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--oly-charcoal);
+}
+
+.medPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--oly-cream);
+  border: 1px solid var(--oly-stone);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--oly-ink);
+  margin: 3px;
+}
+
+.medDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--oly-sage);
+}
+
+.aiBox {
+  background: var(--oly-ai-soft);
+  border: 1px solid rgba(109, 181, 160, 0.2);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.aiText {
+  font-size: 13px;
+  color: var(--oly-forest-muted);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.scoreBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.scoreLabel {
+  font-size: 12px;
+  color: var(--oly-ink);
+  width: 80px;
+}
+
+.scoreTrack {
+  flex: 1;
+  height: 6px;
+  background: var(--oly-stone);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.scoreFill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.scoreValue {
+  font-size: 12px;
+  font-weight: 600;
+  width: 24px;
+  text-align: right;
+}

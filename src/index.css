@@ -1,8 +1,59 @@
+:root {
+  --oly-forest: #2C4A3E;
+  --oly-forest-light: #3D6357;
+  --oly-forest-muted: #4E7A6A;
+  --oly-sage: #7BA898;
+  --oly-sage-light: #A8C5BD;
+  --oly-sage-pale: #D4E8E3;
+  --oly-cream: #F7F4EF;
+  --oly-warm-white: #FDFCFA;
+  --oly-stone: #E8E3DC;
+  --oly-stone-mid: #C8C0B4;
+  --oly-stone-dark: #8A8278;
+  --oly-charcoal: #2A2622;
+  --oly-ink: #3D3830;
+  --oly-amber: #D4823A;
+  --oly-risk-red: #C05555;
+  --oly-good: #4E8C6A;
+  --oly-ai-glow: #6DB5A0;
+  --oly-ai-soft: rgba(109, 181, 160, 0.12);
+}
+
+body {
+  background: var(--oly-cream);
+  color: var(--oly-ink);
+}
+
+/* React Big Calendar overrides */
 .rbc-calendar {
-  font-family:
-    -apple-system, 'system-ui', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-family: 'DM Sans', sans-serif;
 }
 
 .rbc-btn-group button {
   font-size: 14px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--oly-stone-mid);
+  border-radius: 3px;
+}
+
+/* Pulse animation for AI indicators */
+@keyframes oly-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+  }
 }

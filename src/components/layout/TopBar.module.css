@@ -1,0 +1,122 @@
+.topbar {
+  background: var(--oly-warm-white);
+  border-bottom: 1px solid var(--oly-stone);
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.greeting {
+  flex: 1;
+}
+
+.greetingText {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--oly-charcoal);
+}
+
+.greetingDate {
+  font-size: 13px;
+  color: var(--oly-stone-dark);
+}
+
+/* Search */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--oly-cream);
+  border: 1px solid var(--oly-stone);
+  border-radius: 24px;
+  padding: 8px 16px;
+  width: 280px;
+  transition: all 0.2s;
+  cursor: text;
+}
+
+.search:hover,
+.search:focus-within {
+  border-color: var(--oly-sage);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(123, 168, 152, 0.12);
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--oly-ink);
+  width: 100%;
+}
+
+.searchInput::placeholder {
+  color: var(--oly-stone-dark);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* AI status pill */
+.aiPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--oly-ai-soft);
+  border: 1px solid rgba(109, 181, 160, 0.25);
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aiPill:hover {
+  background: rgba(109, 181, 160, 0.2);
+}
+
+.aiDot {
+  width: 7px;
+  height: 7px;
+  background: var(--oly-ai-glow);
+  border-radius: 50%;
+  animation: oly-pulse 2s infinite;
+}
+
+.aiText {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--oly-forest-muted);
+}
+
+/* Notification dot */
+.notifDot {
+  width: 7px;
+  height: 7px;
+  background: var(--oly-amber);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  border: 1.5px solid var(--oly-warm-white);
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 16px;
+  }
+  .search {
+    display: none;
+  }
+}
