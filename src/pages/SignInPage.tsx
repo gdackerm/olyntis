@@ -12,7 +12,6 @@ import {
   Stack,
   Text,
   TextInput,
-  ThemeIcon,
   Title,
 } from '@mantine/core';
 import {
@@ -21,7 +20,6 @@ import {
   IconBrain,
   IconHeartRateMonitor,
   IconReportMedical,
-  IconStethoscope,
 } from '@tabler/icons-react';
 import type { JSX } from 'react';
 import { useState } from 'react';
@@ -47,6 +45,29 @@ function MicrosoftLogo({ size = 18 }: { size?: number }) {
       <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
       <rect x="11" y="11" width="9" height="9" fill="#FFB900" />
     </svg>
+  );
+}
+
+function LogoMark() {
+  return (
+    <div
+      style={{
+        width: 44,
+        height: 44,
+        background: 'var(--oly-sage)',
+        borderRadius: 12,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'Lora', serif",
+        fontSize: 22,
+        fontWeight: 600,
+        color: 'var(--oly-forest)',
+        flexShrink: 0,
+      }}
+    >
+      O
+    </div>
   );
 }
 
@@ -123,7 +144,7 @@ export function SignInPage(): JSX.Element {
         visibleFrom="md"
         style={{
           flex: 1,
-          background: 'linear-gradient(135deg, #1864ab 0%, #228be6 60%, #339af0 100%)',
+          background: 'linear-gradient(160deg, var(--oly-forest) 0%, var(--oly-forest-light) 50%, var(--oly-forest-muted) 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -133,26 +154,29 @@ export function SignInPage(): JSX.Element {
       >
         <Stack gap={32} maw={480}>
           <Group gap="md">
-            <ThemeIcon size={56} radius="xl" variant="white" color="blue">
-              <IconStethoscope size={30} />
-            </ThemeIcon>
-            <Title c="white" fw={700} fz={34}>
-              Nomionis
+            <LogoMark />
+            <Title
+              c="white"
+              fw={600}
+              fz={34}
+              style={{ fontFamily: "'Lora', serif" }}
+            >
+              Olyntis
             </Title>
           </Group>
 
           <Stack gap="sm">
-            <Title c="white" fw={600} fz={30}>
+            <Title c="white" fw={600} fz={28} style={{ fontFamily: "'DM Sans', sans-serif" }}>
               AI-native clinical intelligence
             </Title>
-            <Text c="rgba(255,255,255,0.85)" fz={18} lh={1.7}>
+            <Text c="rgba(255,255,255,0.8)" fz={17} lh={1.7} style={{ fontFamily: "'DM Sans', sans-serif" }}>
               Not AI bolted onto an EHR. A system built from the ground up
               where intelligence is the interface.
             </Text>
           </Stack>
 
           <Stack gap="md">
-            <Text c="rgba(255,255,255,0.6)" fz={13} fw={600} tt="uppercase" lts={1.5}>
+            <Text c="var(--oly-sage-light)" fz={11} fw={600} tt="uppercase" lts={1.5}>
               When you open a patient chart, you see
             </Text>
             <List spacing="lg" center>
@@ -160,12 +184,22 @@ export function SignInPage(): JSX.Element {
                 <List.Item
                   key={item.text}
                   icon={
-                    <ThemeIcon size={38} radius="md" variant="light" color="rgba(255,255,255,0.15)">
-                      <item.icon size={20} color="white" />
-                    </ThemeIcon>
+                    <div
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 8,
+                        background: 'rgba(123, 168, 152, 0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <item.icon size={18} color="var(--oly-sage-light)" />
+                    </div>
                   }
                 >
-                  <Text c="white" fw={500} fz={17}>
+                  <Text c="white" fw={500} fz={16} style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     {item.text}
                   </Text>
                 </List.Item>
@@ -174,10 +208,10 @@ export function SignInPage(): JSX.Element {
           </Stack>
 
           <Group gap={8} mt={8}>
-            <Text c="rgba(255,255,255,0.85)" fz={15} fw={500}>
+            <Text c="rgba(255,255,255,0.75)" fz={14} fw={500} style={{ fontFamily: "'DM Sans', sans-serif" }}>
               No tabs. No hunting. Just what matters right now.
             </Text>
-            <IconArrowRight size={16} color="rgba(255,255,255,0.85)" />
+            <IconArrowRight size={14} color="rgba(255,255,255,0.75)" />
           </Group>
         </Stack>
       </Box>
@@ -189,28 +223,37 @@ export function SignInPage(): JSX.Element {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
+          background: 'var(--oly-cream)',
           minWidth: 0,
         }}
       >
         <Center w="100%" px="md">
           <Stack align="center" gap="md" w="100%" maw={420}>
             {/* Mobile-only header (hidden on desktop where left panel shows) */}
-            <Stack align="center" gap={4} hiddenFrom="md">
-              <ThemeIcon size={56} radius="xl" variant="light" color="blue">
-                <IconStethoscope size={30} />
-              </ThemeIcon>
-              <Title order={2}>Nomionis</Title>
-              <Text c="dimmed" size="xs" ta="center">
+            <Stack align="center" gap={8} hiddenFrom="md">
+              <LogoMark />
+              <Title order={2} style={{ fontFamily: "'Lora', serif" }}>Olyntis</Title>
+              <Text c="var(--oly-stone-dark)" size="xs" ta="center">
                 AI-native clinical intelligence
               </Text>
             </Stack>
 
-            <Card shadow="lg" padding={32} radius="lg" w="100%" withBorder>
+            <Card
+              shadow="sm"
+              padding={32}
+              radius="lg"
+              w="100%"
+              style={{
+                background: 'var(--oly-warm-white)',
+                border: '1px solid var(--oly-stone)',
+              }}
+            >
               <Stack gap="lg">
                 <Stack align="center" gap={4}>
-                  <Title order={3}>Welcome</Title>
-                  <Text c="dimmed" size="sm" ta="center">
+                  <Title order={3} style={{ fontFamily: "'DM Sans', sans-serif", color: 'var(--oly-charcoal)' }}>
+                    Welcome
+                  </Title>
+                  <Text c="var(--oly-stone-dark)" size="sm" ta="center">
                     {mode === 'signin'
                       ? 'Sign in to access the provider portal'
                       : 'Create your account to get started'}
@@ -225,7 +268,10 @@ export function SignInPage(): JSX.Element {
                     fullWidth
                     leftSection={<GoogleLogo />}
                     onClick={() => {}}
-                    styles={{ inner: { justifyContent: 'center' } }}
+                    styles={{
+                      root: { borderColor: 'var(--oly-stone)', background: 'var(--oly-warm-white)', color: 'var(--oly-ink)' },
+                      inner: { justifyContent: 'center' },
+                    }}
                   >
                     Continue with Google
                   </Button>
@@ -235,13 +281,16 @@ export function SignInPage(): JSX.Element {
                     fullWidth
                     leftSection={<MicrosoftLogo />}
                     onClick={() => signInWithMicrosoft()}
-                    styles={{ inner: { justifyContent: 'center' } }}
+                    styles={{
+                      root: { borderColor: 'var(--oly-stone)', background: 'var(--oly-warm-white)', color: 'var(--oly-ink)' },
+                      inner: { justifyContent: 'center' },
+                    }}
                   >
                     Continue with Microsoft
                   </Button>
                 </Stack>
 
-                <Divider label="or continue with email" labelPosition="center" />
+                <Divider label="or continue with email" labelPosition="center" color="var(--oly-stone)" />
 
                 {error && (
                   <Alert
@@ -289,7 +338,7 @@ export function SignInPage(): JSX.Element {
                   />
                   {mode === 'signin' && (
                     <Group justify="flex-end">
-                      <Anchor size="xs" c="dimmed">
+                      <Anchor size="xs" c="var(--oly-stone-dark)">
                         Forgot password?
                       </Anchor>
                     </Group>
@@ -303,6 +352,13 @@ export function SignInPage(): JSX.Element {
                     loading={loading}
                     disabled={!canSubmitSignIn}
                     onClick={handleSignIn}
+                    styles={{
+                      root: {
+                        background: 'var(--oly-forest)',
+                        '&:hover': { background: 'var(--oly-forest-light)' },
+                        '&[data-disabled]': { background: 'var(--oly-stone)', color: 'var(--oly-stone-dark)' },
+                      },
+                    }}
                   >
                     Sign In
                   </Button>
@@ -313,23 +369,30 @@ export function SignInPage(): JSX.Element {
                     loading={loading}
                     disabled={!canSubmitSignUp}
                     onClick={handleSignUp}
+                    styles={{
+                      root: {
+                        background: 'var(--oly-forest)',
+                        '&:hover': { background: 'var(--oly-forest-light)' },
+                        '&[data-disabled]': { background: 'var(--oly-stone)', color: 'var(--oly-stone-dark)' },
+                      },
+                    }}
                   >
                     Create Account
                   </Button>
                 )}
 
-                <Text size="xs" c="dimmed" ta="center">
+                <Text size="xs" c="var(--oly-stone-dark)" ta="center">
                   {mode === 'signin' ? (
                     <>
                       Don&apos;t have an account?{' '}
-                      <Anchor size="xs" onClick={() => { setMode('signup'); setError(null); }}>
+                      <Anchor size="xs" c="var(--oly-forest-muted)" onClick={() => { setMode('signup'); setError(null); }}>
                         Sign up
                       </Anchor>
                     </>
                   ) : (
                     <>
                       Already have an account?{' '}
-                      <Anchor size="xs" onClick={() => { setMode('signin'); setError(null); }}>
+                      <Anchor size="xs" c="var(--oly-forest-muted)" onClick={() => { setMode('signin'); setError(null); }}>
                         Sign in
                       </Anchor>
                     </>
@@ -337,8 +400,8 @@ export function SignInPage(): JSX.Element {
                 </Text>
               </Stack>
             </Card>
-            <Text size="xs" c="dimmed">
-              &copy; {new Date().getFullYear()} Nomionis
+            <Text size="xs" c="var(--oly-stone-dark)">
+              &copy; {new Date().getFullYear()} Olyntis
             </Text>
           </Stack>
         </Center>
