@@ -1,5 +1,5 @@
 -- =============================================================================
--- Nomionis EHR Initial Schema Migration
+-- Olyntis EHR Initial Schema Migration
 -- =============================================================================
 -- FHIR-aligned Electronic Health Record database schema for Supabase/PostgreSQL.
 -- Includes tables, RLS policies, indexes, triggers, and utility functions.
