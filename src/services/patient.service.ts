@@ -7,11 +7,9 @@ class PatientService extends BaseService<'patients'> {
   }
 
   async search(query: string) {
-    const { data, error } = await this.table
-      .select('*')
-      .or(`family_name.ilike.%${query}%,email.ilike.%${query}%,given_name.cs.{${query}}`);
+    const { data, error } = await supabase.rpc('search_patients' as any, { search_query: query });
     if (error) throw error;
-    return data;
+    return (data ?? []) as Awaited<ReturnType<typeof this.getById>>[];
   }
 
   async getWithRelated(id: string) {
