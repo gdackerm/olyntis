@@ -25,19 +25,36 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-async function fetchPractitioner(userId: string): Promise<Practitioner | null> {
+async function fetchPractitioner(userId: string, email?: string | null): Promise<Practitioner | null> {
+  // Primary lookup: by auth_user_id
   const { data, error } = await supabase
     .from('practitioners')
     .select('*')
     .eq('auth_user_id', userId)
     .maybeSingle();
 
-  if (error) {
-    console.error('Error fetching practitioner:', error);
-    return null;
+  if (data) return data;
+  if (error) console.error('Error fetching practitioner:', error);
+
+  // Fallback: match by email (handles multiple auth identities, e.g.
+  // email/password + Microsoft OAuth pointing to the same practitioner)
+  if (email) {
+    const { data: byEmail, error: emailErr } = await supabase
+      .from('practitioners')
+      .select('*')
+      .eq('email', email)
+      .eq('active', true)
+      .maybeSingle();
+
+    if (emailErr) {
+      console.error('Error fetching practitioner by email:', emailErr);
+      return null;
+    }
+
+    return byEmail;
   }
 
-  return data;
+  return null;
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -50,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getSession().then(({ data: { session: initialSession } }) => {
       setSession(initialSession);
       if (initialSession?.user) {
-        fetchPractitioner(initialSession.user.id).then((p) => {
+        fetchPractitioner(initialSession.user.id, initialSession.user.email).then((p) => {
           setPractitioner(p);
           setLoading(false);
         });
@@ -63,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data: { subscription } } = onAuthStateChange((newSession) => {
       setSession(newSession);
       if (newSession?.user) {
-        fetchPractitioner(newSession.user.id).then((p) => {
+        fetchPractitioner(newSession.user.id, newSession.user.email).then((p) => {
           setPractitioner(p);
           setLoading(false);
         });
@@ -84,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error: error.message };
     }
     if (data.user) {
-      const p = await fetchPractitioner(data.user.id);
+      const p = await fetchPractitioner(data.user.id, data.user.email);
       setPractitioner(p);
     }
     return {};
