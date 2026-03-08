@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "exclude": ["dist", "**/*.test.ts", "**/*.test.tsx", "src/test.setup.ts"]
+  "exclude": ["dist", "scripts", "**/*.test.ts", "**/*.test.tsx", "src/test.setup.ts"]
 }
