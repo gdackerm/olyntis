@@ -1,0 +1,212 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--oly-warm-white);
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px 12px;
+}
+
+.title {
+  font-family: 'Lora', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--oly-charcoal);
+}
+
+.searchContainer {
+  position: relative;
+  margin: 0 16px 8px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 10px 8px 32px;
+  border: 1px solid var(--oly-stone);
+  border-radius: 8px;
+  background: var(--oly-cream);
+  font-size: 13px;
+  color: var(--oly-ink);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-color: var(--oly-sage);
+}
+
+.searchInput::placeholder {
+  color: var(--oly-stone-mid);
+}
+
+.searchResults {
+  margin: 0 16px 8px;
+  background: var(--oly-warm-white);
+  border: 1px solid var(--oly-stone);
+  border-radius: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.searchResult {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.searchResult:hover {
+  background: var(--oly-cream);
+}
+
+.resultAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.resultName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--oly-charcoal);
+}
+
+.resultSub {
+  font-size: 11px;
+  color: var(--oly-stone-dark);
+}
+
+.searching {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--oly-stone-dark);
+}
+
+.patientInfo {
+  padding: 0 16px;
+}
+
+.patientCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--oly-stone);
+}
+
+.patientAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.patientName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--oly-charcoal);
+}
+
+.patientMeta {
+  font-size: 12px;
+  color: var(--oly-stone-dark);
+  margin-top: 2px;
+}
+
+.section {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--oly-stone);
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--oly-stone-dark);
+  margin-bottom: 8px;
+}
+
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.scoreLabel {
+  color: var(--oly-ink);
+  font-weight: 500;
+  min-width: 60px;
+}
+
+.scoreValue {
+  font-weight: 600;
+  color: var(--oly-good);
+  min-width: 28px;
+  text-align: right;
+}
+
+.scoreHigh {
+  color: var(--oly-risk-red);
+}
+
+.scoreMod {
+  color: var(--oly-amber);
+}
+
+.scoreDate {
+  font-size: 11px;
+  color: var(--oly-stone-dark);
+  margin-left: auto;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  gap: 12px;
+}
+
+.emptyText {
+  font-size: 13px;
+  color: var(--oly-stone-dark);
+  line-height: 1.5;
+  max-width: 200px;
+}

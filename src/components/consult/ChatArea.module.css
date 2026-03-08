@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.bannerArea {
+  padding: 16px 20px 0;
+  flex-shrink: 0;
+}
+
+.messagesArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  min-height: 0;
+}
+
+.messagesList {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputArea {
+  flex-shrink: 0;
+  padding: 0 20px 16px;
+}
+
+.error {
+  padding: 10px 14px;
+  background: rgba(192, 85, 85, 0.08);
+  border: 1px solid rgba(192, 85, 85, 0.2);
+  border-radius: 8px;
+  color: var(--oly-risk-red);
+  font-size: 13px;
+  margin-bottom: 12px;
+}

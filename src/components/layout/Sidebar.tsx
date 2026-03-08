@@ -7,6 +7,7 @@ import {
   IconLayoutDashboard,
   IconPill,
   IconSettings,
+  IconSparkles,
   IconUsers,
 } from '@tabler/icons-react';
 import type { JSX } from 'react';
@@ -29,6 +30,7 @@ const mainNav: NavItem[] = [
 ];
 
 const clinicalNav: NavItem[] = [
+  { icon: <IconSparkles size={20} />, label: 'AI Consult', href: '/consult' },
   { icon: <IconFileText size={20} />, label: 'Notes', href: '/Communication' },
   { icon: <IconClipboardCheck size={20} />, label: 'Treatment Plans', href: '/Task' },
   { icon: <IconPill size={20} />, label: 'Prescriptions', href: '/integrations' },

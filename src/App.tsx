@@ -23,6 +23,7 @@ import { SignInPage } from './pages/SignInPage';
 import { SpacesPage } from './pages/spaces/SpacesPage';
 import { TasksPage } from './pages/tasks/TasksPage';
 import { GetStartedPage } from './pages/getstarted/GetStartedPage';
+import { AIConsultPage } from './pages/consult/AIConsultPage';
 
 export function App(): JSX.Element | null {
   const { practitioner, loading } = useAuth();
@@ -50,6 +51,8 @@ export function App(): JSX.Element | null {
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/getstarted" element={<GetStartedPage />} />
+          <Route path="/consult" element={<AIConsultPage />} />
+          <Route path="/consult/:patientId" element={<AIConsultPage />} />
           <Route path="/Spaces/Communication" element={<SpacesPage />}>
             <Route index element={<SpacesPage />} />
             <Route path=":topicId" element={<SpacesPage />} />

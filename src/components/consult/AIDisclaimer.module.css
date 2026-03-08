@@ -1,0 +1,7 @@
+.disclaimer {
+  font-size: 11px;
+  color: var(--oly-stone-dark);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--oly-stone);
+}

@@ -1,0 +1,12 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--oly-ai-soft);
+  border: 1px solid rgba(109, 181, 160, 0.25);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--oly-ink);
+  line-height: 1.4;
+}

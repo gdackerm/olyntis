@@ -1,0 +1,90 @@
+.panel {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--oly-warm-white);
+  padding: 16px;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--oly-stone-dark);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--oly-stone);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  gap: 8px;
+}
+
+.itemText {
+  font-size: 13px;
+  color: var(--oly-ink);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemBadge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--oly-cream);
+  color: var(--oly-stone-dark);
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.scoreRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.scoreLabel {
+  font-weight: 500;
+  color: var(--oly-ink);
+  min-width: 55px;
+}
+
+.scoreVal {
+  font-weight: 600;
+  color: var(--oly-good);
+  min-width: 24px;
+  text-align: right;
+}
+
+.high {
+  color: var(--oly-risk-red);
+}
+
+.mod {
+  color: var(--oly-amber);
+}
+
+.scoreDate {
+  font-size: 11px;
+  color: var(--oly-stone-dark);
+  margin-left: auto;
+}
+
+.none {
+  font-size: 12px;
+  color: var(--oly-stone-mid);
+  padding: 4px 0;
+}
