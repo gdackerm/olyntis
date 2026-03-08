@@ -17,10 +17,13 @@ interface ChatAreaProps {
 
 export function ChatArea({ messages, isStreaming, error, onSend, hasPatient }: ChatAreaProps): JSX.Element {
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = messagesAreaRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
   }, [messages]);
 
   const handleSend = () => {
@@ -39,7 +42,7 @@ export function ChatArea({ messages, isStreaming, error, onSend, hasPatient }: C
         <SafetyBanner />
       </div>
 
-      <div className={classes.messagesArea}>
+      <div className={classes.messagesArea} ref={messagesAreaRef}>
         {hasPatient && messages.length === 0 ? (
           <SuggestedPrompts onSelect={handlePromptSelect} />
         ) : (
@@ -54,7 +57,6 @@ export function ChatArea({ messages, isStreaming, error, onSend, hasPatient }: C
             {error && (
               <div className={classes.error}>{error}</div>
             )}
-            <div ref={messagesEndRef} />
           </div>
         )}
       </div>

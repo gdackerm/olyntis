@@ -1,5 +1,6 @@
 import { IconSparkles } from '@tabler/icons-react';
 import type { JSX } from 'react';
+import Markdown from 'react-markdown';
 import type { ConsultMessage } from '../../services/ai-consult.service';
 import { AIDisclaimer } from './AIDisclaimer';
 import classes from './ChatMessage.module.css';
@@ -22,7 +23,13 @@ export function ChatMessage({ message, isStreaming }: ChatMessageProps): JSX.Ele
             {isStreaming && <span className={classes.streaming} />}
           </div>
         )}
-        <div className={classes.content}>{message.content}</div>
+        <div className={classes.content}>
+          {isUser ? (
+            message.content
+          ) : (
+            <Markdown>{message.content}</Markdown>
+          )}
+        </div>
         {!isUser && message.content && <AIDisclaimer />}
       </div>
     </div>
