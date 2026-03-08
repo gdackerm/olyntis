@@ -1,8 +1,6 @@
-// SPDX-FileCopyrightText: Copyright Orangebot, Inc. and Medplum contributors
-// SPDX-License-Identifier: Apache-2.0
-import { Paper, Tabs } from '@mantine/core';
 import type { JSX } from 'react';
 import type { PatientPageTabInfo } from './PatientPage.utils';
+import classes from './PatientTabsNavigation.module.css';
 
 interface PatientTabsNavigationProps {
   tabs: PatientPageTabInfo[];
@@ -12,24 +10,17 @@ interface PatientTabsNavigationProps {
 
 export function PatientTabsNavigation({ tabs, currentTab, onTabChange }: PatientTabsNavigationProps): JSX.Element {
   return (
-    <Paper w="100%">
-      <Tabs value={currentTab.toLowerCase()} onChange={onTabChange}>
-        <Tabs.List
-          style={{
-            display: 'flex',
-            width: '100%',
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            flexWrap: 'nowrap',
-          }}
+    <nav className={classes.tabBar}>
+      {tabs.map((t) => (
+        <button
+          key={t.id}
+          className={`${classes.tab} ${currentTab.toLowerCase() === t.id ? classes.tabActive : ''}`}
+          onClick={() => onTabChange(t.id)}
+          type="button"
         >
-          {tabs.map((t) => (
-            <Tabs.Tab key={t.id} value={t.id}>
-              {t.label}
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-      </Tabs>
-    </Paper>
+          {t.label}
+        </button>
+      ))}
+    </nav>
   );
 }

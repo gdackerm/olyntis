@@ -1,0 +1,102 @@
+.container {
+  padding: 24px;
+}
+
+.countLabel {
+  font-size: 12px;
+  color: var(--oly-stone-dark);
+  margin-bottom: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  transition: background 0.15s;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(232, 227, 220, 0.5);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: var(--oly-cream);
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--oly-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--oly-sage);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.visitType {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--oly-charcoal);
+}
+
+.dateRange {
+  font-size: 12px;
+  color: var(--oly-stone-dark);
+  margin-top: 2px;
+}
+
+.status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.fulfilled {
+  background: rgba(78, 140, 106, 0.1);
+  color: var(--oly-good);
+}
+
+.cancelled {
+  background: var(--oly-stone);
+  color: var(--oly-stone-dark);
+}
+
+.inProgress {
+  background: rgba(212, 130, 58, 0.1);
+  color: var(--oly-amber);
+}
+
+.planned {
+  background: rgba(123, 168, 152, 0.15);
+  color: var(--oly-forest-muted);
+}
+
+.finished {
+  background: rgba(78, 140, 106, 0.1);
+  color: var(--oly-good);
+}
+
+.empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--oly-stone-dark);
+  font-size: 14px;
+}

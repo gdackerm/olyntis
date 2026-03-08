@@ -1,23 +1,41 @@
-import {
-  Badge,
-  Card,
-  Group,
-  Loader,
-  Stack,
-  Text,
-  Timeline,
-  Title,
-} from '@mantine/core';
-import { IconStethoscope } from '@tabler/icons-react';
+import { Loader } from '@mantine/core';
+import { IconStethoscope, IconUrgent } from '@tabler/icons-react';
 import type { JSX } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { Tables } from '../../lib/supabase/types';
-import { formatDateTime, getStatusColor } from '../../lib/utils';
+import { formatDateTime } from '../../lib/utils';
 import { usePatient } from '../../hooks/usePatient';
 import { encounterService } from '../../services/encounter.service';
+import classes from './TimelineTab.module.css';
 
 type Encounter = Tables<'encounters'>;
+
+function getEncounterLabel(classCode: string | null): string {
+  switch (classCode?.toUpperCase()) {
+    case 'AMB': return 'Ambulatory';
+    case 'EMER': return 'Emergency';
+    case 'IMP': return 'Inpatient';
+    case 'VR': return 'Virtual';
+    default: return classCode ?? 'Visit';
+  }
+}
+
+function getStatusClass(status: string | null): string {
+  switch (status) {
+    case 'fulfilled':
+    case 'finished':
+      return classes.fulfilled;
+    case 'cancelled':
+      return classes.cancelled;
+    case 'in-progress':
+      return classes.inProgress;
+    case 'planned':
+      return classes.planned;
+    default:
+      return classes.planned;
+  }
+}
 
 export function TimelineTab(): JSX.Element {
   const patient = usePatient();
@@ -52,51 +70,54 @@ export function TimelineTab(): JSX.Element {
 
   if (encounters.length === 0) {
     return (
-      <Card p="xl" m="md">
-        <Text c="dimmed" ta="center">No encounters recorded yet</Text>
-      </Card>
+      <div className={classes.container}>
+        <div className={classes.empty}>No encounters recorded yet</div>
+      </div>
     );
   }
 
   return (
-    <Card p="md" m="md">
-      <Title order={4} mb="md">Patient Timeline</Title>
-      <Timeline active={0} bulletSize={24} lineWidth={2}>
-        {encounters.map((encounter) => (
-          <Timeline.Item
-            key={encounter.id}
-            bullet={<IconStethoscope size={12} />}
-            title={
-              <Group gap="xs">
-                <Text size="sm" fw={500}>
-                  {encounter.class_code ?? 'Visit'}
-                </Text>
-                <Badge size="xs" color={getStatusColor(encounter.status)}>
+    <div className={classes.container}>
+      <div className={classes.countLabel}>
+        {encounters.length} encounter{encounters.length !== 1 ? 's' : ''}
+      </div>
+      <div className={classes.list}>
+        {encounters.map((encounter) => {
+          const isEmergency = encounter.class_code?.toUpperCase() === 'EMER';
+          return (
+            <div
+              key={encounter.id}
+              className={classes.row}
+              onClick={() =>
+                navigate(`/Patient/${patient.id}/Encounter/${encounter.id}`)?.catch(console.error)
+              }
+            >
+              <div className={classes.icon}>
+                {isEmergency ? (
+                  <IconUrgent size={16} />
+                ) : (
+                  <IconStethoscope size={16} />
+                )}
+              </div>
+              <div className={classes.info}>
+                <div className={classes.visitType}>
+                  {getEncounterLabel(encounter.class_code)}
+                </div>
+                <div className={classes.dateRange}>
+                  {encounter.period_start
+                    ? `${formatDateTime(encounter.period_start)}${encounter.period_end ? ` – ${formatDateTime(encounter.period_end)}` : ''}`
+                    : `Created ${formatDateTime(encounter.created_at)}`}
+                </div>
+              </div>
+              {encounter.status && (
+                <span className={`${classes.status} ${getStatusClass(encounter.status)}`}>
                   {encounter.status}
-                </Badge>
-              </Group>
-            }
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              navigate(`/Patient/${patient.id}/Encounter/${encounter.id}`)?.catch(console.error)
-            }
-          >
-            <Stack gap={2}>
-              {encounter.period_start && (
-                <Text size="xs" c="dimmed">
-                  {formatDateTime(encounter.period_start)}
-                  {encounter.period_end ? ` - ${formatDateTime(encounter.period_end)}` : ''}
-                </Text>
+                </span>
               )}
-              {!encounter.period_start && (
-                <Text size="xs" c="dimmed">
-                  Created {formatDateTime(encounter.created_at)}
-                </Text>
-              )}
-            </Stack>
-          </Timeline.Item>
-        ))}
-      </Timeline>
-    </Card>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

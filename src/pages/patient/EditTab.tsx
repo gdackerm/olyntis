@@ -2,12 +2,10 @@ import {
   Button,
   Group,
   Loader,
-  Paper,
   Select,
   Stack,
   TagsInput,
   TextInput,
-  Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { showNotification } from '@mantine/notifications';
@@ -76,9 +74,19 @@ export function EditTab(): JSX.Element | null {
   }
 
   return (
-    <Paper p="md">
-      <Title order={4} mb="md">Edit Patient</Title>
-      <Stack gap="md" maw={600}>
+    <div style={{ background: 'var(--oly-warm-white)', padding: 24, maxWidth: 560 }}>
+      <div
+        style={{
+          fontFamily: "'Lora', serif",
+          fontSize: 18,
+          fontWeight: 500,
+          color: 'var(--oly-charcoal)',
+          marginBottom: 20,
+        }}
+      >
+        Edit Patient
+      </div>
+      <Stack gap="md">
         <TagsInput
           label="Given Name(s)"
           value={givenName}
@@ -121,17 +129,30 @@ export function EditTab(): JSX.Element | null {
           onChange={(e) => setPhone(e.currentTarget.value)}
         />
         <Group>
-          <Button onClick={handleSubmit} loading={saving}>
+          <Button
+            onClick={handleSubmit}
+            loading={saving}
+            style={{
+              background: 'var(--oly-forest)',
+            }}
+            styles={{
+              root: {
+                '&:hover': { background: 'var(--oly-forest-light)' },
+              },
+            }}
+          >
             Save Changes
           </Button>
           <Button
             variant="subtle"
+            color="gray"
+            style={{ color: 'var(--oly-stone-dark)' }}
             onClick={() => navigate(`/Patient/${patientId}/timeline`)?.catch(console.error)}
           >
             Cancel
           </Button>
         </Group>
       </Stack>
-    </Paper>
+    </div>
   );
 }

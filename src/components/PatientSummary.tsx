@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  Badge,
-  Card,
-  Divider,
-  Group,
-  Loader,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Loader } from '@mantine/core';
 import type { JSX } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import type { Tables } from '../lib/supabase/types';
@@ -18,9 +8,9 @@ import {
   formatGender,
   formatHumanName,
   getInitials,
-  getStatusColor,
 } from '../lib/utils';
 import { patientService } from '../services/patient.service';
+import classes from './PatientSummary.module.css';
 
 type Patient = Tables<'patients'>;
 
@@ -33,6 +23,23 @@ interface PatientRelatedData {
 
 interface PatientSummaryProps {
   patient: Patient;
+}
+
+const AVATAR_GRADIENTS = [
+  'linear-gradient(135deg, #7BA898, #4E7A6A)',
+  'linear-gradient(135deg, #C05555, #A03A3A)',
+  'linear-gradient(135deg, #D4823A, #B06828)',
+  'linear-gradient(135deg, #4E8C6A, #3A6E54)',
+  'linear-gradient(135deg, #8A6AB5, #6A50A0)',
+  'linear-gradient(135deg, #5E8E84, #3D6357)',
+];
+
+function getAvatarGradient(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
 }
 
 export function PatientSummary({ patient }: PatientSummaryProps): JSX.Element {
@@ -64,50 +71,65 @@ export function PatientSummary({ patient }: PatientSummaryProps): JSX.Element {
   const initials = getInitials(patient.given_name, patient.family_name);
 
   return (
-    <Card padding="md">
-      <Stack gap="sm">
-        <Group>
-          <Avatar size="lg" radius="xl" color="blue">
-            {initials}
-          </Avatar>
-          <div>
-            <Title order={4}>{displayName}</Title>
-            <Text size="sm" c="dimmed">
-              {formatGender(patient.gender)}
-              {patient.birth_date && ` | ${formatDate(patient.birth_date)} (${formatAge(patient.birth_date)})`}
-            </Text>
+    <div className={classes.sidebar}>
+      <div className={classes.header}>
+        <div
+          className={classes.avatar}
+          style={{ background: getAvatarGradient(displayName) }}
+        >
+          {initials}
+        </div>
+        <div>
+          <div className={classes.name}>{displayName}</div>
+          <div className={classes.meta}>
+            {formatGender(patient.gender)}
+            {patient.birth_date && ` | ${formatDate(patient.birth_date)} (${formatAge(patient.birth_date)})`}
           </div>
-        </Group>
+        </div>
+      </div>
 
+      <div className={classes.divider} />
+
+      <div className={classes.infoGrid}>
         {patient.phone && (
-          <Text size="sm">Phone: {patient.phone}</Text>
+          <div>
+            <div className={classes.infoLabel}>Phone</div>
+            <div className={classes.infoValue}>{patient.phone}</div>
+          </div>
         )}
         {patient.email && (
-          <Text size="sm">Email: {patient.email}</Text>
+          <div>
+            <div className={classes.infoLabel}>Email</div>
+            <div className={classes.infoValue}>{patient.email}</div>
+          </div>
         )}
+      </div>
 
-        <Divider />
+      {(patient.phone || patient.email) && <div className={classes.divider} />}
 
-        {loading ? (
-          <Loader size="sm" />
-        ) : (
-          <>
-            <SummarySection title="Active Conditions" items={related?.conditions ?? []} renderItem={(c) => c.code_display ?? c.code_value ?? 'Unknown'} />
-            <SummarySection title="Allergies" items={related?.allergies ?? []} renderItem={(a) => a.code_display ?? a.code_value ?? 'Unknown'} />
-            <SummarySection title="Medications" items={related?.medications ?? []} renderItem={(m) => m.medication_display ?? m.medication_code ?? 'Unknown'} />
-            <SummarySection title="Coverage" items={related?.coverages ?? []} renderItem={(c) => {
-              const status = c.status ?? 'unknown';
-              return (
-                <Group gap="xs">
-                  <Text size="sm">{c.subscriber_id ?? 'Coverage'}</Text>
-                  <Badge size="xs" color={getStatusColor(status)}>{status}</Badge>
-                </Group>
-              );
-            }} />
-          </>
-        )}
-      </Stack>
-    </Card>
+      {loading ? (
+        <Loader size="sm" />
+      ) : (
+        <>
+          <SummarySection
+            title="Active Conditions"
+            items={related?.conditions ?? []}
+            renderItem={(c) => c.code_display ?? c.code_value ?? 'Unknown'}
+          />
+          <SummarySection
+            title="Allergies"
+            items={related?.allergies ?? []}
+            renderItem={(a) => a.code_display ?? a.code_value ?? 'Unknown'}
+          />
+          <SummarySection
+            title="Medications"
+            items={related?.medications ?? []}
+            renderItem={(m) => m.medication_display ?? m.medication_code ?? 'Unknown'}
+          />
+          <CoverageSection coverages={related?.coverages ?? []} />
+        </>
+      )}
+    </div>
   );
 }
 
@@ -118,23 +140,45 @@ function SummarySection<T>({
 }: {
   title: string;
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T) => string;
 }): JSX.Element {
   return (
-    <div>
-      <Text size="xs" fw={600} c="dimmed" tt="uppercase" mb={4}>
-        {title}
-      </Text>
+    <div className={classes.section}>
+      <div className={classes.sectionTitle}>{title}</div>
       {items.length === 0 ? (
-        <Text size="sm" c="dimmed">None recorded</Text>
+        <div className={classes.noneRecorded}>None recorded</div>
       ) : (
-        <Stack gap={2}>
+        <div className={classes.pillList}>
           {items.map((item, i) => (
-            <Text size="sm" key={i}>
+            <span className={classes.pill} key={i}>
+              <span className={classes.pillDot} />
               {renderItem(item)}
-            </Text>
+            </span>
           ))}
-        </Stack>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CoverageSection({ coverages }: { coverages: Tables<'coverages'>[] }): JSX.Element {
+  return (
+    <div className={classes.section}>
+      <div className={classes.sectionTitle}>Coverage</div>
+      {coverages.length === 0 ? (
+        <div className={classes.noneRecorded}>None recorded</div>
+      ) : (
+        <div className={classes.pillList}>
+          {coverages.map((c, i) => (
+            <span className={classes.coveragePill} key={i}>
+              <span className={classes.pillDot} />
+              {c.subscriber_id ?? 'Coverage'}
+              {c.status && (
+                <span className={classes.coverageStatus}>{c.status}</span>
+              )}
+            </span>
+          ))}
+        </div>
       )}
     </div>
   );
