@@ -290,7 +290,7 @@ function HeroPanel() {
   return (
     <div
       style={{
-        flex: '0 0 42%',
+        flex: '0 0 55%',
         position: 'relative',
         background: 'linear-gradient(170deg, #1E3A30 0%, var(--oly-forest) 45%, var(--oly-forest-muted) 100%)',
         display: 'flex',
@@ -507,13 +507,14 @@ export function SignInPage(): JSX.Element {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'center',
           background: 'var(--oly-cream)',
           position: 'relative',
           overflow: 'hidden',
           minWidth: 0,
-          padding: '0 24px',
+          paddingLeft: 64,
+          paddingRight: 32,
         }}
       >
         {/* Mobile: subtle sage radial gradient */}
@@ -865,7 +866,7 @@ export function SignInPage(): JSX.Element {
         @media (min-width: 768px) {
           .hero-panel-wrapper {
             display: flex !important;
-            flex: 0 0 42%;
+            flex: 0 0 55%;
           }
           .mobile-hero-wrapper {
             display: none !important;
