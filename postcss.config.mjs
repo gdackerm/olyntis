@@ -1,10 +1,14 @@
 // SPDX-FileCopyrightText: Copyright Orangebot, Inc. and Medplum contributors
 // SPDX-License-Identifier: Apache-2.0
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import mantinePreset from 'postcss-preset-mantine';
 import simpleVars from 'postcss-simple-vars';
 
 const config = {
   plugins: [
+    tailwindcss(),
+    autoprefixer(),
     mantinePreset(),
     simpleVars({
       variables: {

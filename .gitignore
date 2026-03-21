@@ -26,3 +26,9 @@ package-lock.json
 
 # Local Netlify folder
 .netlify
+
+# Synthea patient data generator (large JAR + raw output)
+synthea/
+
+# MCP config (contains OAuth session tokens)
+.mcp.json

@@ -10,6 +10,7 @@ import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { EncounterChartPage } from './pages/encounter/EncounterChartPage';
 import { EncounterModal } from './pages/encounter/EncounterModal';
 import { IntegrationsPage } from './pages/integrations/IntegrationsPage';
+import { LandingPage } from './pages/landing/LandingPage';
 import { MessagesPage } from './pages/messages/MessagesPage';
 import { CommunicationTab } from './pages/patient/CommunicationTab';
 import { EditTab } from './pages/patient/EditTab';
@@ -39,8 +40,9 @@ export function App(): JSX.Element | null {
   if (!practitioner) {
     return (
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/signin" element={<SignInPage />} />
-        <Route path="*" element={<Navigate to="/signin" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   }

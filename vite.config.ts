@@ -34,7 +34,10 @@ export default defineConfig({
     port: 3000,
   },
   resolve: {
-    alias,
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      ...alias,
+    },
   },
   test: {
     globals: true,

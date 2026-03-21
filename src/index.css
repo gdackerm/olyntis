@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --oly-forest: #2C4A3E;
   --oly-forest-light: #3D6357;

@@ -32,7 +32,7 @@ export function GetStartedPage({ onDismiss }: GetStartedPageProps = {}): JSX.Ele
     <Container size="md" py="xl">
       <Stack gap="xl">
         <div>
-          <Title order={2}>Welcome to Nomionis</Title>
+          <Title order={2}>Welcome to Olyntis</Title>
           <Text c="dimmed" mt="xs">
             Get started by exploring the key features of your EHR system.
           </Text>
