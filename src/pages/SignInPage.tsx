@@ -513,6 +513,7 @@ export function SignInPage(): JSX.Element {
           position: 'relative',
           overflow: 'hidden',
           minWidth: 0,
+          paddingRight: '5%',
         }}
       >
         {/* Mobile: subtle sage radial gradient */}
@@ -586,10 +587,7 @@ export function SignInPage(): JSX.Element {
                     style={{
                       fontFamily: "'Lora', serif",
                       fontStyle: 'italic',
-                      background: 'linear-gradient(135deg, var(--oly-forest-muted) 0%, var(--oly-sage) 50%, var(--oly-ai-glow) 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
+                      color: 'var(--oly-forest-muted)',
                     }}
                   >
                     {mode === 'signin'
