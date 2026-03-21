@@ -267,7 +267,7 @@ function HeroPanel() {
   return (
     <div
       style={{
-        flex: '0 0 55%',
+        flex: 1,
         position: 'relative',
         background: 'linear-gradient(170deg, #1E3A30 0%, var(--oly-forest) 45%, var(--oly-forest-muted) 100%)',
         display: 'flex',
@@ -518,7 +518,7 @@ export function SignInPage(): JSX.Element {
           }}
         />
 
-        <div style={{ width: '100%', maxWidth: 420, padding: '0 16px', position: 'relative', zIndex: 1 }}>
+        <div className="auth-card-container" style={{ width: '100%', maxWidth: 420, padding: '0 16px', position: 'relative', zIndex: 1 }}>
           <Stack align="center" gap="md">
             {/* Mobile-only hero */}
             <div className="mobile-hero-wrapper" style={{ display: 'var(--mobile-hero-display, block)' }}>
