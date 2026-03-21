@@ -11,11 +11,14 @@ import { RiskFlagsCard } from '../../components/dashboard/RiskFlagsCard';
 import { TreatmentProgress } from '../../components/dashboard/TreatmentProgress';
 import { MiniCalendar } from '../../components/dashboard/MiniCalendar';
 import { PatientQuickView } from '../../components/dashboard/PatientQuickView';
+import { AIOnboardingModal } from '../../components/onboarding/AIOnboardingModal';
+import { useOnboardingModal } from '../../components/onboarding/useOnboardingModal';
 import classes from './DashboardPage.module.css';
 
 export function DashboardPage(): JSX.Element {
   const { todayAppointments, riskAlerts, screeningScores, stats, loading } = useDashboardData();
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
+  const { isOpen: isOnboardingOpen, close: closeOnboarding } = useOnboardingModal();
 
   if (loading) {
     return (
@@ -56,6 +59,8 @@ export function DashboardPage(): JSX.Element {
         patientId={selectedPatientId}
         onClose={() => setSelectedPatientId(null)}
       />
+
+      <AIOnboardingModal open={isOnboardingOpen} onClose={closeOnboarding} />
     </>
   );
 }

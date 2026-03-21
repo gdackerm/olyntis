@@ -23,12 +23,14 @@ export function LandingPage() {
         className="relative flex flex-col gap-6 items-center justify-center px-4 max-w-4xl mx-auto text-center"
       >
         {/* Logo / Brand */}
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-lg bg-emerald-700 flex items-center justify-center">
-            <span className="text-white font-bold text-xl">O</span>
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-slate-900">
-            Olyntis AI
+        <div className="flex items-center gap-2.5 mb-2 bg-white/40 backdrop-blur-md rounded-full py-2 pl-4 pr-3 border border-white/50 shadow-sm">
+          <img
+            src="/img/olyntis-logo.png"
+            alt="Olyntis"
+            className="h-8 w-auto"
+          />
+          <span className="text-[11px] font-semibold tracking-wide uppercase text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5">
+            AI
           </span>
         </div>
 
