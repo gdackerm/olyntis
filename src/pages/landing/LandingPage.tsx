@@ -1,12 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import React from "react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { useNavigate } from "react-router";
+import { ContactFormModal } from "@/components/contact/ContactFormModal";
 
 export function LandingPage() {
   const navigate = useNavigate();
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
     <AuroraBackground>
@@ -88,12 +90,12 @@ export function LandingPage() {
           >
             Sign In
           </button>
-          <a
-            href="mailto:greg@olyntisai.com"
+          <button
+            onClick={() => setContactOpen(true)}
             className="bg-white/70 hover:bg-white transition-colors rounded-full text-slate-800 px-8 py-3 font-medium text-base border border-slate-300"
           >
             Get in Touch
-          </a>
+          </button>
         </div>
 
         {/* Footer tagline */}
@@ -101,6 +103,8 @@ export function LandingPage() {
           FHIR R4 &middot; Da Vinci CRD/DTR/PAS &middot; HIPAA &middot; ONC-aligned
         </p>
       </motion.div>
+
+      <ContactFormModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </AuroraBackground>
   );
 }
