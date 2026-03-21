@@ -300,7 +300,7 @@ function HeroPanel() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        style={{ maxWidth: 480, position: 'relative', zIndex: 1 }}
+        style={{ maxWidth: 600, position: 'relative', zIndex: 1 }}
       >
         {/* Eyebrow */}
         <motion.p
@@ -310,12 +310,12 @@ function HeroPanel() {
             fontSize: 11,
             fontWeight: 600,
             textTransform: 'uppercase' as const,
-            letterSpacing: 2,
+            letterSpacing: 2.5,
             color: 'var(--oly-sage-light)',
             margin: '0 0 16px',
           }}
         >
-          THE FIRST 10 SECONDS
+          CLINICAL INTELLIGENCE, NOT CLINICAL SOFTWARE
         </motion.p>
 
         {/* Headline */}
@@ -323,11 +323,11 @@ function HeroPanel() {
           variants={fadeUp}
           style={{
             fontFamily: "'Lora', serif",
-            fontSize: 36,
+            fontSize: 42,
             fontWeight: 600,
-            lineHeight: 1.25,
+            lineHeight: 1.2,
             color: 'white',
-            margin: '0 0 20px',
+            margin: '0 0 24px',
           }}
         >
           Your AI co-pilot already reviewed the chart
@@ -338,15 +338,56 @@ function HeroPanel() {
           variants={fadeUp}
           style={{
             fontFamily: "'DM Sans', sans-serif",
-            fontSize: 16,
+            fontSize: 17,
             lineHeight: 1.7,
             color: 'rgba(255,255,255,0.75)',
-            margin: '0 0 36px',
+            margin: '0 0 28px',
           }}
         >
-          Before you even sit down, Olyntis has identified what changed, flagged risks,
-          detected care gaps, and drafted a plan. Intelligence is the interface.
+          Before you even sit down, Olyntis has identified what changed,
+          flagged risks, detected care gaps, and drafted a plan.
+          Your patients deserve more than clicks &mdash; they deserve a
+          physician whose tools think alongside them.
         </motion.p>
+
+        {/* Value props */}
+        <motion.div
+          variants={fadeUp}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '14px 24px',
+            marginBottom: 32,
+          }}
+        >
+          {[
+            { label: 'Pre-visit chart synthesis', desc: 'Every record reviewed before you walk in' },
+            { label: 'Real-time risk detection', desc: 'Flags what matters, not what\'s loudest' },
+            { label: 'Care gap identification', desc: 'Nothing falls through the cracks' },
+            { label: 'AI-drafted care plans', desc: 'Start with a plan, not a blank screen' },
+          ].map((item) => (
+            <div key={item.label}>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 14,
+                fontWeight: 600,
+                color: 'white',
+                margin: '0 0 2px',
+              }}>
+                {item.label}
+              </p>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 13,
+                color: 'rgba(255,255,255,0.5)',
+                margin: 0,
+                lineHeight: 1.4,
+              }}>
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </motion.div>
 
         {/* Dashboard preview */}
         <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
