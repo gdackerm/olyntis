@@ -5,6 +5,7 @@ import {
   IconCurrencyDollar,
   IconFileText,
   IconLayoutDashboard,
+  IconLogout,
   IconPill,
   IconSettings,
   IconSparkles,
@@ -42,7 +43,7 @@ const opsNav: NavItem[] = [
 ];
 
 export function Sidebar(): JSX.Element {
-  const { practitioner } = useAuth();
+  const { practitioner, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -105,6 +106,12 @@ export function Sidebar(): JSX.Element {
             <div className={classes.userRole}>Psychiatrist</div>
           </div>
         </div>
+        <button className={classes.navItem} onClick={() => signOut()} style={{ marginTop: 4 }}>
+          <span className={classes.navIcon}>
+            <IconLogout size={20} />
+          </span>
+          <span className={classes.navItemText}>Sign Out</span>
+        </button>
       </div>
     </aside>
   );

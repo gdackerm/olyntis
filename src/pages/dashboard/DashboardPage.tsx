@@ -2,14 +2,12 @@ import { Loader } from '@mantine/core';
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { useDashboardData } from '../../hooks/useDashboardData';
-import { StatCards } from '../../components/dashboard/StatCards';
-import { RoleSwitcher } from '../../components/dashboard/RoleSwitcher';
+import { MorningBrief } from '../../components/dashboard/MorningBrief';
 import { TodaySchedule } from '../../components/dashboard/TodaySchedule';
 import { SessionNoteEditor } from '../../components/dashboard/SessionNoteEditor';
 import { AIInsightsPanel } from '../../components/dashboard/AIInsightsPanel';
 import { RiskFlagsCard } from '../../components/dashboard/RiskFlagsCard';
 import { TreatmentProgress } from '../../components/dashboard/TreatmentProgress';
-import { MiniCalendar } from '../../components/dashboard/MiniCalendar';
 import { PatientQuickView } from '../../components/dashboard/PatientQuickView';
 import { AIOnboardingModal } from '../../components/onboarding/AIOnboardingModal';
 import { useOnboardingModal } from '../../components/onboarding/useOnboardingModal';
@@ -35,8 +33,11 @@ export function DashboardPage(): JSX.Element {
 
   return (
     <>
-      <RoleSwitcher />
-      <StatCards stats={stats} />
+      <MorningBrief
+        stats={stats}
+        riskAlerts={riskAlerts}
+        todayAppointments={todayAppointments}
+      />
 
       <div className={classes.grid}>
         <div className={classes.left}>
@@ -51,7 +52,6 @@ export function DashboardPage(): JSX.Element {
           <AIInsightsPanel riskAlerts={riskAlerts} screeningScores={screeningScores} />
           <RiskFlagsCard alerts={riskAlerts} />
           <TreatmentProgress screeningScores={screeningScores} />
-          <MiniCalendar />
         </div>
       </div>
 
