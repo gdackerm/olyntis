@@ -557,7 +557,7 @@ export function SignInPage(): JSX.Element {
             >
               <Stack gap="lg">
                 {/* Header — animated on mode toggle */}
-                <Stack align="center" gap={4}>
+                <Stack align="center" gap={8}>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={mode}
@@ -565,6 +565,7 @@ export function SignInPage(): JSX.Element {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.25 }}
+                      style={{ width: '100%', textAlign: 'center' }}
                     >
                       <Title
                         order={3}
@@ -579,10 +580,21 @@ export function SignInPage(): JSX.Element {
                       </Title>
                     </motion.div>
                   </AnimatePresence>
-                  <Text c="var(--oly-stone-dark)" size="sm" ta="center">
+                  <Text
+                    size="sm"
+                    ta="center"
+                    style={{
+                      fontFamily: "'Lora', serif",
+                      fontStyle: 'italic',
+                      background: 'linear-gradient(135deg, var(--oly-forest-muted) 0%, var(--oly-sage) 50%, var(--oly-ai-glow) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >
                     {mode === 'signin'
-                      ? 'Sign in to access the provider portal'
-                      : 'Create your account to get started'}
+                      ? 'Healing begins before the encounter'
+                      : 'Join the future of clinical care'}
                   </Text>
                 </Stack>
 
