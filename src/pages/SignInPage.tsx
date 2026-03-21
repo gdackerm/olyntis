@@ -274,18 +274,26 @@ function HeroPanel() {
         flexDirection: 'column',
         justifyContent: 'center',
         padding: '64px 56px',
+        paddingBottom: '20%',
         overflow: 'hidden',
       }}
     >
       <AmbientGlow />
 
       {/* Logo — top-left */}
-      <div style={{ position: 'absolute', top: 32, left: 40 }}>
-        <img
-          src="/img/olyntis-logo.png"
-          alt="Olyntis"
-          style={{ height: 32, width: 'auto', filter: 'brightness(0) invert(1)' }}
-        />
+      <div style={{ position: 'absolute', top: 32, left: 40, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <svg width="28" height="28" viewBox="0 0 60 60" fill="none">
+          <circle cx="16" cy="30" r="11" stroke="rgba(255,255,255,0.9)" strokeWidth="3.5" fill="none" />
+          <line x1="27" y1="30" x2="38" y2="18" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="27" y1="30" x2="38" y2="42" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="27" y1="30" x2="42" y2="30" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="40" cy="17" r="5" fill="rgba(255,255,255,0.9)" />
+          <circle cx="42" cy="30" r="4" fill="rgba(255,255,255,0.6)" />
+          <circle cx="40" cy="43" r="3.5" fill="rgba(255,255,255,0.35)" />
+        </svg>
+        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 20, fontWeight: 500, color: 'white', letterSpacing: -0.3 }}>
+          olyntis
+        </span>
       </div>
 
       <motion.div
@@ -530,7 +538,7 @@ export function SignInPage(): JSX.Element {
                 borderRadius: 20,
                 border: '1px solid rgba(232,227,220,0.6)',
                 boxShadow: '0 8px 32px rgba(42,38,34,0.08), 0 2px 8px rgba(42,38,34,0.04)',
-                padding: 32,
+                padding: 64,
               }}
             >
               <Stack gap="lg">
