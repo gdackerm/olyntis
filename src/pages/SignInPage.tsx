@@ -513,7 +513,9 @@ export function SignInPage(): JSX.Element {
           position: 'relative',
           overflow: 'hidden',
           minWidth: 0,
-          paddingRight: '5%',
+          paddingLeft: 40,
+          paddingRight: 40,
+          marginLeft: -60,
         }}
       >
         {/* Mobile: subtle sage radial gradient */}
