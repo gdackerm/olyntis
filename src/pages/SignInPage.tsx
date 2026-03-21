@@ -347,7 +347,7 @@ function HeroPanel() {
           Before you even sit down, Olyntis has identified what changed,
           flagged risks, detected care gaps, and drafted a plan.
           Your patients deserve more than clicks &mdash; they deserve a
-          physician whose tools think alongside them.
+          clinician whose tools think alongside them.
         </motion.p>
 
         {/* Value props */}
