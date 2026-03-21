@@ -1,30 +1,23 @@
 import {
   Alert,
   Anchor,
-  Box,
   Button,
-  Card,
-  Center,
   Divider,
   Group,
-  List,
   PasswordInput,
   Stack,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
-import {
-  IconAlertCircle,
-  IconArrowRight,
-  IconBrain,
-  IconHeartRateMonitor,
-  IconReportMedical,
-} from '@tabler/icons-react';
+import { IconAlertCircle } from '@tabler/icons-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { JSX } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signInWithMicrosoft } from '../lib/supabase/auth';
 import { useAuth } from '../providers/AuthProvider';
+
+/* ─── SVG logos ─── */
 
 function GoogleLogo({ size = 18 }: { size?: number }) {
   return (
@@ -52,15 +45,15 @@ function LogoMark() {
   return (
     <div
       style={{
-        width: 44,
-        height: 44,
+        width: 40,
+        height: 40,
         background: 'var(--oly-sage)',
-        borderRadius: 12,
+        borderRadius: 10,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: "'Lora', serif",
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 600,
         color: 'var(--oly-forest)',
         flexShrink: 0,
@@ -71,24 +64,385 @@ function LogoMark() {
   );
 }
 
-const VALUE_PROPS = [
-  {
-    icon: IconHeartRateMonitor,
-    text: 'What changed since last visit',
-  },
-  {
-    icon: IconAlertCircle,
-    text: 'Risks identified today',
-  },
-  {
-    icon: IconReportMedical,
-    text: 'Care gaps detected',
-  },
-  {
-    icon: IconBrain,
-    text: 'Draft plan prepared',
-  },
+/* ─── Ambient glow blobs for left panel ─── */
+
+function AmbientGlow() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+      <motion.div
+        animate={{ x: [0, 60, -40, 0], y: [0, -50, 30, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute',
+          top: '20%',
+          left: '15%',
+          width: 340,
+          height: 340,
+          borderRadius: '50%',
+          background: 'var(--oly-sage)',
+          opacity: 0.06,
+          filter: 'blur(80px)',
+        }}
+      />
+      <motion.div
+        animate={{ x: [0, -50, 40, 0], y: [0, 40, -30, 0] }}
+        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute',
+          bottom: '15%',
+          right: '10%',
+          width: 280,
+          height: 280,
+          borderRadius: '50%',
+          background: 'var(--oly-ai-glow)',
+          opacity: 0.06,
+          filter: 'blur(80px)',
+        }}
+      />
+    </div>
+  );
+}
+
+/* ─── CSS-only dashboard preview ─── */
+
+const MINI_STATS = [
+  { label: 'Reviewed', border: 'var(--oly-sage)' },
+  { label: 'Flagged', border: 'var(--oly-amber)' },
+  { label: 'Gaps', border: 'var(--oly-good)' },
+  { label: 'Plans', border: 'var(--oly-forest)' },
 ];
+
+function DashboardPreview() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      animate={{
+        rotateY: hovered ? 0 : -2,
+        rotateX: hovered ? 0 : 2,
+      }}
+      transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+      style={{
+        perspective: 1200,
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 14,
+        padding: 16,
+        transformStyle: 'preserve-3d',
+      }}
+    >
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        <motion.div
+          animate={{ scale: [1, 0.85, 1], opacity: [1, 0.6, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: 'var(--oly-good)',
+          }}
+        />
+        <div style={{
+          height: 6,
+          width: 56,
+          borderRadius: 3,
+          background: 'rgba(255,255,255,0.15)',
+        }} />
+        <div style={{ flex: 1 }} />
+        <div style={{
+          height: 6,
+          width: 32,
+          borderRadius: 3,
+          background: 'rgba(255,255,255,0.1)',
+        }} />
+      </div>
+
+      {/* 2×2 stat cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+        {MINI_STATS.map((s) => (
+          <div
+            key={s.label}
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: 8,
+              padding: '10px 10px 8px',
+              borderTop: `2px solid ${s.border}`,
+            }}
+          >
+            <div style={{
+              height: 14,
+              width: 28,
+              borderRadius: 4,
+              background: 'rgba(255,255,255,0.2)',
+              marginBottom: 6,
+            }} />
+            <div style={{
+              height: 5,
+              width: '60%',
+              borderRadius: 3,
+              background: 'rgba(255,255,255,0.08)',
+            }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Insight lines */}
+      {[0.55, 0.72].map((w, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: i === 0 ? 8 : 0 }}>
+          <div style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: i === 0 ? 'var(--oly-sage)' : 'var(--oly-amber)',
+            flexShrink: 0,
+          }} />
+          <div style={{
+            height: 5,
+            width: `${w * 100}%`,
+            borderRadius: 3,
+            background: 'rgba(255,255,255,0.1)',
+          }} />
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+/* ─── AI presence pill with incrementing counter ─── */
+
+function AIPresencePill() {
+  const [count, setCount] = useState(3847);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCount((c) => c + Math.floor(Math.random() * 3) + 1);
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 20,
+        padding: '6px 14px',
+      }}
+    >
+      <motion.div
+        animate={{ scale: [1, 0.85, 1], opacity: [1, 0.6, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        style={{
+          width: 7,
+          height: 7,
+          borderRadius: '50%',
+          background: 'var(--oly-good)',
+          flexShrink: 0,
+        }}
+      />
+      <span
+        style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 13,
+          color: 'rgba(255,255,255,0.7)',
+        }}
+      >
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={count}
+            initial={{ y: 8, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -8, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ display: 'inline-block', fontVariantNumeric: 'tabular-nums' }}
+          >
+            {count.toLocaleString()}
+          </motion.span>
+        </AnimatePresence>
+        {' '}clinical insights generated today
+      </span>
+    </div>
+  );
+}
+
+/* ─── Stagger container ─── */
+
+const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
+};
+
+/* ─── Hero panel (desktop left) ─── */
+
+function HeroPanel() {
+  return (
+    <div
+      style={{
+        flex: '0 0 55%',
+        position: 'relative',
+        background: 'linear-gradient(170deg, #1E3A30 0%, var(--oly-forest) 45%, var(--oly-forest-muted) 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '64px 56px',
+        overflow: 'hidden',
+      }}
+    >
+      <AmbientGlow />
+
+      {/* Logo — top-left */}
+      <div style={{ position: 'absolute', top: 32, left: 40, display: 'flex', alignItems: 'center', gap: 12 }}>
+        <LogoMark />
+        <span style={{ fontFamily: "'Lora', serif", fontSize: 22, fontWeight: 600, color: 'white' }}>
+          Olyntis
+        </span>
+      </div>
+
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        style={{ maxWidth: 480, position: 'relative', zIndex: 1 }}
+      >
+        {/* Eyebrow */}
+        <motion.p
+          variants={fadeUp}
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: 'uppercase' as const,
+            letterSpacing: 2,
+            color: 'var(--oly-sage-light)',
+            margin: '0 0 16px',
+          }}
+        >
+          THE FIRST 10 SECONDS
+        </motion.p>
+
+        {/* Headline */}
+        <motion.h1
+          variants={fadeUp}
+          style={{
+            fontFamily: "'Lora', serif",
+            fontSize: 36,
+            fontWeight: 600,
+            lineHeight: 1.25,
+            color: 'white',
+            margin: '0 0 20px',
+          }}
+        >
+          Your AI co-pilot already reviewed the chart
+        </motion.h1>
+
+        {/* Subtext */}
+        <motion.p
+          variants={fadeUp}
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 16,
+            lineHeight: 1.7,
+            color: 'rgba(255,255,255,0.75)',
+            margin: '0 0 36px',
+          }}
+        >
+          Before you even sit down, Olyntis has identified what changed, flagged risks,
+          detected care gaps, and drafted a plan. Intelligence is the interface.
+        </motion.p>
+
+        {/* Dashboard preview */}
+        <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
+          <DashboardPreview />
+        </motion.div>
+
+        {/* AI pill */}
+        <motion.div variants={fadeUp}>
+          <AIPresencePill />
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ─── Mobile hero (condensed) ─── */
+
+function MobileHero() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 12,
+        paddingTop: 8,
+        paddingBottom: 4,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <LogoMark />
+        <span style={{ fontFamily: "'Lora', serif", fontSize: 20, fontWeight: 600, color: 'var(--oly-charcoal)' }}>
+          Olyntis
+        </span>
+      </div>
+      <p
+        style={{
+          fontFamily: "'Lora', serif",
+          fontSize: 18,
+          fontWeight: 600,
+          color: 'var(--oly-charcoal)',
+          textAlign: 'center',
+          margin: 0,
+          lineHeight: 1.35,
+        }}
+      >
+        Your AI co-pilot is ready
+      </p>
+      {/* Small AI pill for mobile */}
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          background: 'var(--oly-ai-soft)',
+          borderRadius: 16,
+          padding: '4px 12px',
+        }}
+      >
+        <motion.div
+          animate={{ scale: [1, 0.85, 1], opacity: [1, 0.6, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: 'var(--oly-good)',
+          }}
+        />
+        <span style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 12,
+          color: 'var(--oly-forest)',
+        }}>
+          AI Active
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main page ─── */
 
 export function SignInPage(): JSX.Element {
   const { signIn, signUp } = useAuth();
@@ -138,121 +492,93 @@ export function SignInPage(): JSX.Element {
   };
 
   return (
-    <Box h="100vh" style={{ display: 'flex' }}>
-      {/* Left panel — value proposition */}
-      <Box
-        visibleFrom="md"
-        style={{
-          flex: 1,
-          background: 'linear-gradient(160deg, var(--oly-forest) 0%, var(--oly-forest-light) 50%, var(--oly-forest-muted) 100%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 64,
-          paddingBottom: 180,
-        }}
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* ── Desktop left panel ── */}
+      <div
+        style={{ display: 'var(--hero-display, none)' }}
+        className="hero-panel-wrapper"
       >
-        <Stack gap={32} maw={480}>
-          <Group gap="md">
-            <LogoMark />
-            <Title
-              c="white"
-              fw={600}
-              fz={34}
-              style={{ fontFamily: "'Lora', serif" }}
-            >
-              Olyntis
-            </Title>
-          </Group>
+        <HeroPanel />
+      </div>
 
-          <Stack gap="sm">
-            <Title c="white" fw={600} fz={28} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              AI-native clinical intelligence
-            </Title>
-            <Text c="rgba(255,255,255,0.8)" fz={17} lh={1.7} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Not AI bolted onto an EHR. A system built from the ground up
-              where intelligence is the interface.
-            </Text>
-          </Stack>
-
-          <Stack gap="md">
-            <Text c="var(--oly-sage-light)" fz={11} fw={600} tt="uppercase" lts={1.5}>
-              When you open a patient chart, you see
-            </Text>
-            <List spacing="lg" center>
-              {VALUE_PROPS.map((item) => (
-                <List.Item
-                  key={item.text}
-                  icon={
-                    <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: 8,
-                        background: 'rgba(123, 168, 152, 0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <item.icon size={18} color="var(--oly-sage-light)" />
-                    </div>
-                  }
-                >
-                  <Text c="white" fw={500} fz={16} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                    {item.text}
-                  </Text>
-                </List.Item>
-              ))}
-            </List>
-          </Stack>
-
-          <Group gap={8} mt={8}>
-            <Text c="rgba(255,255,255,0.75)" fz={14} fw={500} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              No tabs. No hunting. Just what matters right now.
-            </Text>
-            <IconArrowRight size={14} color="rgba(255,255,255,0.75)" />
-          </Group>
-        </Stack>
-      </Box>
-
-      {/* Right panel — auth form */}
-      <Box
+      {/* ── Right panel — auth form ── */}
+      <div
         style={{
           flex: 1,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           background: 'var(--oly-cream)',
+          position: 'relative',
+          overflow: 'hidden',
           minWidth: 0,
         }}
       >
-        <Center w="100%" px="md">
-          <Stack align="center" gap="md" w="100%" maw={420}>
-            {/* Mobile-only header (hidden on desktop where left panel shows) */}
-            <Stack align="center" gap={8} hiddenFrom="md">
-              <LogoMark />
-              <Title order={2} style={{ fontFamily: "'Lora', serif" }}>Olyntis</Title>
-              <Text c="var(--oly-stone-dark)" size="xs" ta="center">
-                AI-native clinical intelligence
-              </Text>
-            </Stack>
+        {/* Mobile: subtle sage radial gradient */}
+        <div
+          className="mobile-gradient-accent"
+          style={{
+            display: 'var(--mobile-gradient-display, block)',
+            position: 'absolute',
+            top: -80,
+            right: -80,
+            width: 260,
+            height: 260,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, var(--oly-sage-pale) 0%, transparent 70%)',
+            opacity: 0.5,
+            pointerEvents: 'none',
+          }}
+        />
 
-            <Card
-              shadow="sm"
-              padding={32}
-              radius="lg"
-              w="100%"
+        <div style={{ width: '100%', maxWidth: 420, padding: '0 16px', position: 'relative', zIndex: 1 }}>
+          <Stack align="center" gap="md">
+            {/* Mobile-only hero */}
+            <div className="mobile-hero-wrapper" style={{ display: 'var(--mobile-hero-display, block)' }}>
+              <MobileHero />
+            </div>
+
+            {/* Frosted glass card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
               style={{
-                background: 'var(--oly-warm-white)',
-                border: '1px solid var(--oly-stone)',
+                width: '100%',
+                background: 'rgba(253,252,250,0.85)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                borderRadius: 20,
+                border: '1px solid rgba(232,227,220,0.6)',
+                boxShadow: '0 8px 32px rgba(42,38,34,0.08), 0 2px 8px rgba(42,38,34,0.04)',
+                padding: 32,
               }}
             >
               <Stack gap="lg">
+                {/* Header — animated on mode toggle */}
                 <Stack align="center" gap={4}>
-                  <Title order={3} style={{ fontFamily: "'DM Sans', sans-serif", color: 'var(--oly-charcoal)' }}>
-                    Welcome
-                  </Title>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={mode}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <Title
+                        order={3}
+                        ta="center"
+                        style={{
+                          fontFamily: "'Lora', serif",
+                          color: 'var(--oly-charcoal)',
+                          fontSize: 24,
+                        }}
+                      >
+                        {mode === 'signin' ? 'Welcome back' : 'Get started'}
+                      </Title>
+                    </motion.div>
+                  </AnimatePresence>
                   <Text c="var(--oly-stone-dark)" size="sm" ta="center">
                     {mode === 'signin'
                       ? 'Sign in to access the provider portal'
@@ -260,74 +586,145 @@ export function SignInPage(): JSX.Element {
                   </Text>
                 </Stack>
 
-                {/* SSO buttons */}
-                <Stack gap="xs">
-                  <Button
-                    variant="default"
-                    size="md"
-                    fullWidth
-                    leftSection={<GoogleLogo />}
-                    onClick={() => {}}
-                    styles={{
-                      root: { borderColor: 'var(--oly-stone)', background: 'var(--oly-warm-white)', color: 'var(--oly-ink)' },
-                      inner: { justifyContent: 'center' },
-                    }}
-                  >
-                    Continue with Google
-                  </Button>
-                  <Button
-                    variant="default"
-                    size="md"
-                    fullWidth
-                    leftSection={<MicrosoftLogo />}
-                    onClick={() => signInWithMicrosoft()}
-                    styles={{
-                      root: { borderColor: 'var(--oly-stone)', background: 'var(--oly-warm-white)', color: 'var(--oly-ink)' },
-                      inner: { justifyContent: 'center' },
-                    }}
-                  >
-                    Continue with Microsoft
-                  </Button>
+                {/* SSO buttons — primary flow */}
+                <Stack gap={10}>
+                  <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                    <Button
+                      variant="default"
+                      fullWidth
+                      leftSection={<GoogleLogo />}
+                      onClick={() => {}}
+                      styles={{
+                        root: {
+                          height: 48,
+                          borderRadius: 12,
+                          borderColor: 'var(--oly-stone)',
+                          background: 'var(--oly-warm-white)',
+                          color: 'var(--oly-ink)',
+                          transition: 'box-shadow 0.2s',
+                          '&:hover': {
+                            boxShadow: '0 0 0 2px var(--oly-sage-pale)',
+                          },
+                        },
+                        inner: { justifyContent: 'center' },
+                      }}
+                    >
+                      Continue with Google
+                    </Button>
+                  </motion.div>
+
+                  <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                    <Button
+                      variant="default"
+                      fullWidth
+                      leftSection={<MicrosoftLogo />}
+                      onClick={() => signInWithMicrosoft()}
+                      styles={{
+                        root: {
+                          height: 48,
+                          borderRadius: 12,
+                          borderColor: 'var(--oly-stone)',
+                          background: 'var(--oly-warm-white)',
+                          color: 'var(--oly-ink)',
+                          transition: 'box-shadow 0.2s',
+                          '&:hover': {
+                            boxShadow: '0 0 0 2px var(--oly-sage-pale)',
+                          },
+                        },
+                        inner: { justifyContent: 'center' },
+                      }}
+                    >
+                      Continue with Microsoft
+                    </Button>
+                  </motion.div>
                 </Stack>
 
-                <Divider label="or continue with email" labelPosition="center" color="var(--oly-stone)" />
+                <Divider label="or" labelPosition="center" color="var(--oly-stone)" />
 
-                {error && (
-                  <Alert
-                    icon={<IconAlertCircle size={16} />}
-                    color="red"
-                    w="100%"
-                    variant="light"
-                  >
-                    {error}
-                  </Alert>
-                )}
-
-                <Stack w="100%" gap="sm" onKeyDown={handleKeyDown}>
-                  {mode === 'signup' && (
-                    <Group grow>
-                      <TextInput
-                        label="First Name"
-                        placeholder="First name"
-                        value={givenName}
-                        onChange={(e) => setGivenName(e.currentTarget.value)}
-                        required
-                      />
-                      <TextInput
-                        label="Last Name"
-                        placeholder="Last name"
-                        value={familyName}
-                        onChange={(e) => setFamilyName(e.currentTarget.value)}
-                        required
-                      />
-                    </Group>
+                {/* Error alert — animated */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <Alert
+                        icon={<IconAlertCircle size={16} />}
+                        color="red"
+                        w="100%"
+                        variant="light"
+                      >
+                        {error}
+                      </Alert>
+                    </motion.div>
                   )}
+                </AnimatePresence>
+
+                {/* Email / password fields */}
+                <Stack w="100%" gap="sm" onKeyDown={handleKeyDown}>
+                  {/* Sign-up name fields — animated slide in */}
+                  <AnimatePresence>
+                    {mode === 'signup' && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <Group grow>
+                          <TextInput
+                            label="First Name"
+                            placeholder="First name"
+                            value={givenName}
+                            onChange={(e) => setGivenName(e.currentTarget.value)}
+                            required
+                            styles={{
+                              input: {
+                                height: 44,
+                                borderRadius: 10,
+                                background: 'var(--oly-cream)',
+                                '&:focus': { borderColor: 'var(--oly-sage)' },
+                              },
+                            }}
+                          />
+                          <TextInput
+                            label="Last Name"
+                            placeholder="Last name"
+                            value={familyName}
+                            onChange={(e) => setFamilyName(e.currentTarget.value)}
+                            required
+                            styles={{
+                              input: {
+                                height: 44,
+                                borderRadius: 10,
+                                background: 'var(--oly-cream)',
+                                '&:focus': { borderColor: 'var(--oly-sage)' },
+                              },
+                            }}
+                          />
+                        </Group>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
                   <TextInput
                     label="Email"
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.currentTarget.value)}
                     required
+                    styles={{
+                      input: {
+                        height: 44,
+                        borderRadius: 10,
+                        background: 'var(--oly-cream)',
+                        '&:focus': { borderColor: 'var(--oly-sage)' },
+                      },
+                    }}
                   />
                   <PasswordInput
                     label="Password"
@@ -335,6 +732,14 @@ export function SignInPage(): JSX.Element {
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
                     required
+                    styles={{
+                      input: {
+                        height: 44,
+                        borderRadius: 10,
+                        background: 'var(--oly-cream)',
+                        '&:focus': { borderColor: 'var(--oly-sage)' },
+                      },
+                    }}
                   />
                   {mode === 'signin' && (
                     <Group justify="flex-end">
@@ -345,18 +750,27 @@ export function SignInPage(): JSX.Element {
                   )}
                 </Stack>
 
+                {/* Submit button */}
                 {mode === 'signin' ? (
                   <Button
-                    size="md"
                     fullWidth
                     loading={loading}
                     disabled={!canSubmitSignIn}
                     onClick={handleSignIn}
                     styles={{
                       root: {
-                        background: 'var(--oly-forest)',
-                        '&:hover': { background: 'var(--oly-forest-light)' },
-                        '&[data-disabled]': { background: 'var(--oly-stone)', color: 'var(--oly-stone-dark)' },
+                        height: 48,
+                        borderRadius: 12,
+                        background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                        transition: 'box-shadow 0.2s',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                          boxShadow: '0 4px 20px rgba(44,74,62,0.35)',
+                        },
+                        '&[data-disabled]': {
+                          background: 'var(--oly-stone)',
+                          color: 'var(--oly-stone-dark)',
+                        },
                       },
                     }}
                   >
@@ -364,23 +778,42 @@ export function SignInPage(): JSX.Element {
                   </Button>
                 ) : (
                   <Button
-                    size="md"
                     fullWidth
                     loading={loading}
                     disabled={!canSubmitSignUp}
                     onClick={handleSignUp}
                     styles={{
                       root: {
-                        background: 'var(--oly-forest)',
-                        '&:hover': { background: 'var(--oly-forest-light)' },
-                        '&[data-disabled]': { background: 'var(--oly-stone)', color: 'var(--oly-stone-dark)' },
+                        height: 48,
+                        borderRadius: 12,
+                        background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                        transition: 'box-shadow 0.2s',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                          boxShadow: '0 4px 20px rgba(44,74,62,0.35)',
+                        },
+                        '&[data-disabled]': {
+                          background: 'var(--oly-stone)',
+                          color: 'var(--oly-stone-dark)',
+                        },
                       },
                     }}
                   >
                     Create Account
                   </Button>
                 )}
+              </Stack>
+            </motion.div>
 
+            {/* Mode toggle — animated crossfade */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={mode}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
                 <Text size="xs" c="var(--oly-stone-dark)" ta="center">
                   {mode === 'signin' ? (
                     <>
@@ -398,14 +831,40 @@ export function SignInPage(): JSX.Element {
                     </>
                   )}
                 </Text>
-              </Stack>
-            </Card>
+              </motion.div>
+            </AnimatePresence>
+
             <Text size="xs" c="var(--oly-stone-dark)">
               &copy; {new Date().getFullYear()} Olyntis
             </Text>
           </Stack>
-        </Center>
-      </Box>
-    </Box>
+        </div>
+      </div>
+
+      {/* Responsive styles injected via <style> tag */}
+      <style>{`
+        .hero-panel-wrapper {
+          display: none !important;
+        }
+        .mobile-hero-wrapper {
+          display: block !important;
+        }
+        .mobile-gradient-accent {
+          display: block !important;
+        }
+        @media (min-width: 768px) {
+          .hero-panel-wrapper {
+            display: flex !important;
+            flex: 0 0 55%;
+          }
+          .mobile-hero-wrapper {
+            display: none !important;
+          }
+          .mobile-gradient-accent {
+            display: none !important;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
