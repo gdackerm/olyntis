@@ -290,7 +290,7 @@ function HeroPanel() {
   return (
     <div
       style={{
-        flex: '0 0 55%',
+        flex: '0 0 42%',
         position: 'relative',
         background: 'linear-gradient(170deg, #1E3A30 0%, var(--oly-forest) 45%, var(--oly-forest-muted) 100%)',
         display: 'flex',
@@ -513,9 +513,7 @@ export function SignInPage(): JSX.Element {
           position: 'relative',
           overflow: 'hidden',
           minWidth: 0,
-          paddingLeft: 40,
-          paddingRight: 40,
-          marginLeft: -60,
+          padding: '0 24px',
         }}
       >
         {/* Mobile: subtle sage radial gradient */}
@@ -584,12 +582,12 @@ export function SignInPage(): JSX.Element {
                     </motion.div>
                   </AnimatePresence>
                   <Text
-                    size="sm"
                     ta="center"
                     style={{
                       fontFamily: "'Lora', serif",
                       fontStyle: 'italic',
-                      color: 'var(--oly-forest-muted)',
+                      fontSize: 15,
+                      color: 'var(--oly-forest)',
                     }}
                   >
                     {mode === 'signin'
@@ -867,7 +865,7 @@ export function SignInPage(): JSX.Element {
         @media (min-width: 768px) {
           .hero-panel-wrapper {
             display: flex !important;
-            flex: 0 0 55%;
+            flex: 0 0 42%;
           }
           .mobile-hero-wrapper {
             display: none !important;
