@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { signInWithMicrosoft } from '../lib/supabase/auth';
 import { useAuth } from '../providers/AuthProvider';
 
-/* ─── SVG logos (SSO providers) ─── */
+/* ─── SVG logos ─── */
 
 function GoogleLogo({ size = 18 }: { size?: number }) {
   return (
@@ -41,29 +41,7 @@ function MicrosoftLogo({ size = 18 }: { size?: number }) {
   );
 }
 
-/* ─── Molecular logo mark (matches brand logo) ─── */
-
-function MolecularMark({ size = 48, color = 'white' }: { size?: number; color?: string }) {
-  const sage = color === 'white' ? 'rgba(255,255,255,0.6)' : 'var(--oly-sage)';
-  const sageLt = color === 'white' ? 'rgba(255,255,255,0.35)' : 'var(--oly-sage-light)';
-  const primary = color === 'white' ? 'white' : 'var(--oly-forest)';
-  return (
-    <svg width={size} height={size} viewBox="0 0 60 60" fill="none">
-      {/* Large ring — left */}
-      <circle cx="16" cy="30" r="11" stroke={primary} strokeWidth="3.5" fill="none" />
-      {/* Center hub lines */}
-      <line x1="27" y1="30" x2="38" y2="18" stroke={sage} strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="27" y1="30" x2="38" y2="42" stroke={sage} strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="27" y1="30" x2="42" y2="30" stroke={sage} strokeWidth="2.5" strokeLinecap="round" />
-      {/* Endpoint dots */}
-      <circle cx="40" cy="17" r="5" fill={primary} />
-      <circle cx="42" cy="30" r="4" fill={sage} />
-      <circle cx="40" cy="43" r="3.5" fill={sageLt} />
-    </svg>
-  );
-}
-
-/* ─── Ambient glow blobs ─── */
+/* ─── Ambient glow blobs for left panel ─── */
 
 function AmbientGlow() {
   return (
@@ -73,13 +51,13 @@ function AmbientGlow() {
         transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
-          top: '15%',
-          left: '20%',
-          width: 300,
-          height: 300,
+          top: '20%',
+          left: '15%',
+          width: 340,
+          height: 340,
           borderRadius: '50%',
           background: 'var(--oly-sage)',
-          opacity: 0.07,
+          opacity: 0.06,
           filter: 'blur(80px)',
         }}
       />
@@ -88,13 +66,13 @@ function AmbientGlow() {
         transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
-          bottom: '20%',
-          right: '15%',
-          width: 250,
-          height: 250,
+          bottom: '15%',
+          right: '10%',
+          width: 280,
+          height: 280,
           borderRadius: '50%',
           background: 'var(--oly-ai-glow)',
-          opacity: 0.07,
+          opacity: 0.06,
           filter: 'blur(80px)',
         }}
       />
@@ -102,9 +80,116 @@ function AmbientGlow() {
   );
 }
 
+/* ─── CSS-only dashboard preview ─── */
+
+const MINI_STATS = [
+  { label: 'Reviewed', border: 'var(--oly-sage)' },
+  { label: 'Flagged', border: 'var(--oly-amber)' },
+  { label: 'Gaps', border: 'var(--oly-good)' },
+  { label: 'Plans', border: 'var(--oly-forest)' },
+];
+
+function DashboardPreview() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      animate={{
+        rotateY: hovered ? 0 : -2,
+        rotateX: hovered ? 0 : 2,
+      }}
+      transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+      style={{
+        perspective: 1200,
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 14,
+        padding: 16,
+        transformStyle: 'preserve-3d',
+      }}
+    >
+      {/* Top bar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+        <motion.div
+          animate={{ scale: [1, 0.85, 1], opacity: [1, 0.6, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: 'var(--oly-good)',
+          }}
+        />
+        <div style={{
+          height: 6,
+          width: 56,
+          borderRadius: 3,
+          background: 'rgba(255,255,255,0.15)',
+        }} />
+        <div style={{ flex: 1 }} />
+        <div style={{
+          height: 6,
+          width: 32,
+          borderRadius: 3,
+          background: 'rgba(255,255,255,0.1)',
+        }} />
+      </div>
+
+      {/* 2×2 stat cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+        {MINI_STATS.map((s) => (
+          <div
+            key={s.label}
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: 8,
+              padding: '10px 10px 8px',
+              borderTop: `2px solid ${s.border}`,
+            }}
+          >
+            <div style={{
+              height: 14,
+              width: 28,
+              borderRadius: 4,
+              background: 'rgba(255,255,255,0.2)',
+              marginBottom: 6,
+            }} />
+            <div style={{
+              height: 5,
+              width: '60%',
+              borderRadius: 3,
+              background: 'rgba(255,255,255,0.08)',
+            }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Insight lines */}
+      {[0.55, 0.72].map((w, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: i === 0 ? 8 : 0 }}>
+          <div style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: i === 0 ? 'var(--oly-sage)' : 'var(--oly-amber)',
+            flexShrink: 0,
+          }} />
+          <div style={{
+            height: 5,
+            width: `${w * 100}%`,
+            borderRadius: 3,
+            background: 'rgba(255,255,255,0.1)',
+          }} />
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
 /* ─── AI presence pill with incrementing counter ─── */
 
-function AIPresencePill({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
+function AIPresencePill() {
   const [count, setCount] = useState(3847);
 
   useEffect(() => {
@@ -114,16 +199,14 @@ function AIPresencePill({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
     return () => clearInterval(id);
   }, []);
 
-  const isDark = variant === 'dark';
-
   return (
     <div
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: 8,
-        background: isDark ? 'rgba(255,255,255,0.08)' : 'var(--oly-ai-soft)',
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(109,181,160,0.2)'}`,
+        background: 'rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.08)',
         borderRadius: 20,
         padding: '6px 14px',
       }}
@@ -143,7 +226,7 @@ function AIPresencePill({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
         style={{
           fontFamily: "'DM Sans', sans-serif",
           fontSize: 13,
-          color: isDark ? 'rgba(255,255,255,0.7)' : 'var(--oly-forest)',
+          color: 'rgba(255,255,255,0.7)',
         }}
       >
         <AnimatePresence mode="popLayout">
@@ -158,81 +241,59 @@ function AIPresencePill({ variant = 'dark' }: { variant?: 'dark' | 'light' }) {
             {count.toLocaleString()}
           </motion.span>
         </AnimatePresence>
-        {' '}clinical insights today
+        {' '}clinical insights generated today
       </span>
     </div>
   );
 }
 
-/* ─── Stagger animation ─── */
+/* ─── Stagger container ─── */
 
-const stagger = {
+const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
+  visible: {
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+  },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' as const } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' as const } },
 };
 
-/* ─── Feature pills ─── */
-
-const FEATURES = [
-  'Chart pre-review',
-  'Risk detection',
-  'Care gap alerts',
-  'Draft plans',
-];
-
-/* ─── Left panel (desktop) ─── */
+/* ─── Hero panel (desktop left) ─── */
 
 function HeroPanel() {
   return (
     <div
       style={{
-        flex: '0 0 50%',
+        flex: '0 0 55%',
         position: 'relative',
-        background: 'linear-gradient(160deg, #1a2e28 0%, var(--oly-forest) 50%, #2d5449 100%)',
+        background: 'linear-gradient(170deg, #1E3A30 0%, var(--oly-forest) 45%, var(--oly-forest-muted) 100%)',
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: 'column',
         justifyContent: 'center',
-        padding: '48px 56px',
+        padding: '64px 56px',
         overflow: 'hidden',
       }}
     >
       <AmbientGlow />
 
+      {/* Logo — top-left */}
+      <div style={{ position: 'absolute', top: 32, left: 40 }}>
+        <img
+          src="/img/olyntis-logo.png"
+          alt="Olyntis"
+          style={{ height: 32, width: 'auto', filter: 'brightness(0) invert(1)' }}
+        />
+      </div>
+
       <motion.div
-        variants={stagger}
+        variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        style={{
-          maxWidth: 440,
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-        }}
+        style={{ maxWidth: 480, position: 'relative', zIndex: 1 }}
       >
-        {/* Logo mark + wordmark */}
-        <motion.div
-          variants={fadeUp}
-          style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 40 }}
-        >
-          <MolecularMark size={44} color="white" />
-          <span style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 28,
-            fontWeight: 500,
-            color: 'white',
-            letterSpacing: -0.5,
-          }}>
-            olyntis
-          </span>
-        </motion.div>
-
         {/* Eyebrow */}
         <motion.p
           variants={fadeUp}
@@ -241,7 +302,7 @@ function HeroPanel() {
             fontSize: 11,
             fontWeight: 600,
             textTransform: 'uppercase' as const,
-            letterSpacing: 2.5,
+            letterSpacing: 2,
             color: 'var(--oly-sage-light)',
             margin: '0 0 16px',
           }}
@@ -253,13 +314,12 @@ function HeroPanel() {
         <motion.h1
           variants={fadeUp}
           style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 38,
+            fontFamily: "'Lora', serif",
+            fontSize: 36,
             fontWeight: 600,
-            lineHeight: 1.2,
+            lineHeight: 1.25,
             color: 'white',
             margin: '0 0 20px',
-            letterSpacing: -0.5,
           }}
         >
           Your AI co-pilot already reviewed the chart
@@ -272,48 +332,29 @@ function HeroPanel() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: 16,
             lineHeight: 1.7,
-            color: 'rgba(255,255,255,0.65)',
-            margin: '0 0 32px',
+            color: 'rgba(255,255,255,0.75)',
+            margin: '0 0 36px',
           }}
         >
-          Before you even sit down, Olyntis has identified what changed,
-          flagged risks, and drafted a plan.
+          Before you even sit down, Olyntis has identified what changed, flagged risks,
+          detected care gaps, and drafted a plan. Intelligence is the interface.
         </motion.p>
 
-        {/* Feature pills */}
-        <motion.div
-          variants={fadeUp}
-          style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}
-        >
-          {FEATURES.map((f) => (
-            <span
-              key={f}
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 12,
-                fontWeight: 500,
-                color: 'rgba(255,255,255,0.8)',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 20,
-                padding: '5px 14px',
-              }}
-            >
-              {f}
-            </span>
-          ))}
+        {/* Dashboard preview */}
+        <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
+          <DashboardPreview />
         </motion.div>
 
         {/* AI pill */}
         <motion.div variants={fadeUp}>
-          <AIPresencePill variant="dark" />
+          <AIPresencePill />
         </motion.div>
       </motion.div>
     </div>
   );
 }
 
-/* ─── Mobile hero ─── */
+/* ─── Mobile hero (condensed) ─── */
 
 function MobileHero() {
   return (
@@ -322,7 +363,7 @@ function MobileHero() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 10,
+        gap: 12,
         paddingTop: 8,
         paddingBottom: 4,
       }}
@@ -330,21 +371,50 @@ function MobileHero() {
       <img
         src="/img/olyntis-logo.png"
         alt="Olyntis"
-        style={{ height: 32, width: 'auto' }}
+        style={{ height: 28, width: 'auto' }}
       />
       <p
         style={{
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 15,
-          fontWeight: 500,
+          fontFamily: "'Lora', serif",
+          fontSize: 18,
+          fontWeight: 600,
           color: 'var(--oly-charcoal)',
           textAlign: 'center',
           margin: 0,
+          lineHeight: 1.35,
         }}
       >
-        AI-native clinical intelligence
+        Your AI co-pilot is ready
       </p>
-      <AIPresencePill variant="light" />
+      {/* Small AI pill for mobile */}
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          background: 'var(--oly-ai-soft)',
+          borderRadius: 16,
+          padding: '4px 12px',
+        }}
+      >
+        <motion.div
+          animate={{ scale: [1, 0.85, 1], opacity: [1, 0.6, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: 'var(--oly-good)',
+          }}
+        />
+        <span style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 12,
+          color: 'var(--oly-forest)',
+        }}>
+          AI Active
+        </span>
+      </div>
     </div>
   );
 }
@@ -401,7 +471,10 @@ export function SignInPage(): JSX.Element {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* ── Desktop left panel ── */}
-      <div className="hero-panel-wrapper">
+      <div
+        style={{ display: 'var(--hero-display, none)' }}
+        className="hero-panel-wrapper"
+      >
         <HeroPanel />
       </div>
 
@@ -420,49 +493,65 @@ export function SignInPage(): JSX.Element {
           padding: '32px 24px',
         }}
       >
-        <div style={{ width: '100%', maxWidth: 400, position: 'relative', zIndex: 1 }}>
+        {/* Mobile: subtle sage radial gradient */}
+        <div
+          className="mobile-gradient-accent"
+          style={{
+            display: 'var(--mobile-gradient-display, block)',
+            position: 'absolute',
+            top: -80,
+            right: -80,
+            width: 260,
+            height: 260,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, var(--oly-sage-pale) 0%, transparent 70%)',
+            opacity: 0.5,
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div style={{ width: '100%', maxWidth: 420, padding: '0 16px', position: 'relative', zIndex: 1 }}>
           <Stack align="center" gap="md">
             {/* Mobile-only hero */}
-            <div className="mobile-hero-wrapper">
+            <div className="mobile-hero-wrapper" style={{ display: 'var(--mobile-hero-display, block)' }}>
               <MobileHero />
             </div>
 
-            {/* Auth card */}
+            {/* Frosted glass card */}
             <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.45, ease: 'easeOut', delay: 0.1 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
               style={{
                 width: '100%',
-                background: 'rgba(253,252,250,0.9)',
+                background: 'rgba(253,252,250,0.85)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
                 borderRadius: 20,
-                border: '1px solid rgba(232,227,220,0.5)',
-                boxShadow: '0 8px 40px rgba(42,38,34,0.07), 0 1px 4px rgba(42,38,34,0.04)',
+                border: '1px solid rgba(232,227,220,0.6)',
+                boxShadow: '0 8px 32px rgba(42,38,34,0.08), 0 2px 8px rgba(42,38,34,0.04)',
                 padding: 32,
               }}
             >
               <Stack gap="lg">
-                {/* Header */}
-                <Stack align="center" gap={6}>
+                {/* Header — animated on mode toggle */}
+                <Stack align="center" gap={8}>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={mode}
-                      initial={{ opacity: 0, y: 6 }}
+                      initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.2 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.25 }}
                       style={{ width: '100%', textAlign: 'center' }}
                     >
                       <Title
                         order={3}
                         ta="center"
                         style={{
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: "'Lora', serif",
                           color: 'var(--oly-charcoal)',
-                          fontSize: 22,
-                          fontWeight: 600,
+                          fontSize: 24,
                         }}
                       >
                         {mode === 'signin' ? 'Welcome back' : 'Get started'}
@@ -472,11 +561,10 @@ export function SignInPage(): JSX.Element {
                   <Text
                     ta="center"
                     style={{
-                      fontFamily: "'DM Sans', sans-serif",
+                      fontFamily: "'Lora', serif",
                       fontStyle: 'italic',
-                      fontSize: 14,
-                      color: 'var(--oly-charcoal)',
-                      opacity: 0.6,
+                      fontSize: 15,
+                      color: 'var(--oly-forest)',
                     }}
                   >
                     {mode === 'signin'
@@ -485,7 +573,7 @@ export function SignInPage(): JSX.Element {
                   </Text>
                 </Stack>
 
-                {/* SSO buttons */}
+                {/* SSO buttons — primary flow */}
                 <Stack gap={10}>
                   <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
                     <Button
@@ -495,7 +583,7 @@ export function SignInPage(): JSX.Element {
                       onClick={() => {}}
                       styles={{
                         root: {
-                          height: 46,
+                          height: 48,
                           borderRadius: 12,
                           borderColor: 'var(--oly-stone)',
                           background: 'var(--oly-warm-white)',
@@ -520,7 +608,7 @@ export function SignInPage(): JSX.Element {
                       onClick={() => signInWithMicrosoft()}
                       styles={{
                         root: {
-                          height: 46,
+                          height: 48,
                           borderRadius: 12,
                           borderColor: 'var(--oly-stone)',
                           background: 'var(--oly-warm-white)',
@@ -540,7 +628,7 @@ export function SignInPage(): JSX.Element {
 
                 <Divider label="or" labelPosition="center" color="var(--oly-stone)" />
 
-                {/* Error alert */}
+                {/* Error alert — animated */}
                 <AnimatePresence>
                   {error && (
                     <motion.div
@@ -550,15 +638,21 @@ export function SignInPage(): JSX.Element {
                       transition={{ duration: 0.25 }}
                       style={{ overflow: 'hidden' }}
                     >
-                      <Alert icon={<IconAlertCircle size={16} />} color="red" w="100%" variant="light">
+                      <Alert
+                        icon={<IconAlertCircle size={16} />}
+                        color="red"
+                        w="100%"
+                        variant="light"
+                      >
                         {error}
                       </Alert>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                {/* Form fields */}
+                {/* Email / password fields */}
                 <Stack w="100%" gap="sm" onKeyDown={handleKeyDown}>
+                  {/* Sign-up name fields — animated slide in */}
                   <AnimatePresence>
                     {mode === 'signup' && (
                       <motion.div
@@ -575,7 +669,14 @@ export function SignInPage(): JSX.Element {
                             value={givenName}
                             onChange={(e) => setGivenName(e.currentTarget.value)}
                             required
-                            styles={{ input: { height: 42, borderRadius: 10, background: 'var(--oly-cream)' } }}
+                            styles={{
+                              input: {
+                                height: 44,
+                                borderRadius: 10,
+                                background: 'var(--oly-cream)',
+                                '&:focus': { borderColor: 'var(--oly-sage)' },
+                              },
+                            }}
                           />
                           <TextInput
                             label="Last Name"
@@ -583,7 +684,14 @@ export function SignInPage(): JSX.Element {
                             value={familyName}
                             onChange={(e) => setFamilyName(e.currentTarget.value)}
                             required
-                            styles={{ input: { height: 42, borderRadius: 10, background: 'var(--oly-cream)' } }}
+                            styles={{
+                              input: {
+                                height: 44,
+                                borderRadius: 10,
+                                background: 'var(--oly-cream)',
+                                '&:focus': { borderColor: 'var(--oly-sage)' },
+                              },
+                            }}
                           />
                         </Group>
                       </motion.div>
@@ -596,7 +704,14 @@ export function SignInPage(): JSX.Element {
                     value={email}
                     onChange={(e) => setEmail(e.currentTarget.value)}
                     required
-                    styles={{ input: { height: 42, borderRadius: 10, background: 'var(--oly-cream)' } }}
+                    styles={{
+                      input: {
+                        height: 44,
+                        borderRadius: 10,
+                        background: 'var(--oly-cream)',
+                        '&:focus': { borderColor: 'var(--oly-sage)' },
+                      },
+                    }}
                   />
                   <PasswordInput
                     label="Password"
@@ -604,44 +719,80 @@ export function SignInPage(): JSX.Element {
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
                     required
-                    styles={{ input: { height: 42, borderRadius: 10, background: 'var(--oly-cream)' } }}
+                    styles={{
+                      input: {
+                        height: 44,
+                        borderRadius: 10,
+                        background: 'var(--oly-cream)',
+                        '&:focus': { borderColor: 'var(--oly-sage)' },
+                      },
+                    }}
                   />
                   {mode === 'signin' && (
                     <Group justify="flex-end">
-                      <Anchor size="xs" c="var(--oly-stone-dark)">Forgot password?</Anchor>
+                      <Anchor size="xs" c="var(--oly-stone-dark)">
+                        Forgot password?
+                      </Anchor>
                     </Group>
                   )}
                 </Stack>
 
-                {/* Submit */}
-                <Button
-                  fullWidth
-                  loading={loading}
-                  disabled={mode === 'signin' ? !canSubmitSignIn : !canSubmitSignUp}
-                  onClick={mode === 'signin' ? handleSignIn : handleSignUp}
-                  styles={{
-                    root: {
-                      height: 46,
-                      borderRadius: 12,
-                      background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
-                      transition: 'box-shadow 0.2s',
-                      '&:hover': {
+                {/* Submit button */}
+                {mode === 'signin' ? (
+                  <Button
+                    fullWidth
+                    loading={loading}
+                    disabled={!canSubmitSignIn}
+                    onClick={handleSignIn}
+                    styles={{
+                      root: {
+                        height: 48,
+                        borderRadius: 12,
                         background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
-                        boxShadow: '0 4px 20px rgba(44,74,62,0.3)',
+                        transition: 'box-shadow 0.2s',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                          boxShadow: '0 4px 20px rgba(44,74,62,0.35)',
+                        },
+                        '&[data-disabled]': {
+                          background: 'var(--oly-stone)',
+                          color: 'var(--oly-stone-dark)',
+                        },
                       },
-                      '&[data-disabled]': {
-                        background: 'var(--oly-stone)',
-                        color: 'var(--oly-stone-dark)',
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                ) : (
+                  <Button
+                    fullWidth
+                    loading={loading}
+                    disabled={!canSubmitSignUp}
+                    onClick={handleSignUp}
+                    styles={{
+                      root: {
+                        height: 48,
+                        borderRadius: 12,
+                        background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                        transition: 'box-shadow 0.2s',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, var(--oly-forest) 0%, var(--oly-forest-light) 100%)',
+                          boxShadow: '0 4px 20px rgba(44,74,62,0.35)',
+                        },
+                        '&[data-disabled]': {
+                          background: 'var(--oly-stone)',
+                          color: 'var(--oly-stone-dark)',
+                        },
                       },
-                    },
-                  }}
-                >
-                  {mode === 'signin' ? 'Sign In' : 'Create Account'}
-                </Button>
+                    }}
+                  >
+                    Create Account
+                  </Button>
+                )}
               </Stack>
             </motion.div>
 
-            {/* Mode toggle */}
+            {/* Mode toggle — animated crossfade */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={mode}
@@ -677,7 +828,7 @@ export function SignInPage(): JSX.Element {
         </div>
       </div>
 
-      {/* Responsive styles */}
+      {/* Responsive styles injected via <style> tag */}
       <style>{`
         .hero-panel-wrapper {
           display: none !important;
@@ -685,12 +836,18 @@ export function SignInPage(): JSX.Element {
         .mobile-hero-wrapper {
           display: block !important;
         }
+        .mobile-gradient-accent {
+          display: block !important;
+        }
         @media (min-width: 768px) {
           .hero-panel-wrapper {
             display: flex !important;
-            flex: 0 0 50%;
+            flex: 0 0 55%;
           }
           .mobile-hero-wrapper {
+            display: none !important;
+          }
+          .mobile-gradient-accent {
             display: none !important;
           }
         }
